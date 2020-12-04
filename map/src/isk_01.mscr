@@ -1,0 +1,162 @@
+% Script File: isk_01.mscr
+% Decoded from: 0 to 5D0 (isk_01)
+
+#new:EntryList $EntryList
+{
+	~Vec4f:Entry0 % -576.0    0.0  -71.0  179.0
+	~Vec4f:Entry1 % -555.0    0.0  170.0  350.0
+}
+
+#new:Header $Header
+{
+	[MainScript]  $Script_Main
+	[EntryList]   $EntryList
+	[EntryCount]  00000002
+	[Background]  80200000
+	[MapTattle]   00190095
+}
+
+#new:Script $Script_80240060
+{
+    0:  If  *Flag_ISK_13  ==  .False
+   10:  	Thread
+   18:  		Call  FadeInMusic   ( 00000001 .Song:TutankoopaWarning 00000000 000007D0 00000000 0000007F )
+   3C:  		Call  FadeOutMusic  ( 00000000 000007D0 )
+   50:  		Call  DisablePlayerInput        ( .True )
+   60:  		Wait  20`
+   6C:  		SetGroup  00000000
+   78:  		Call  802D5830      ( 00000001 )
+   88:  		Call  ShowMessageAtScreenPos    ( 000D00DD 000000A0 00000028 ) % Bleeag, Blooooaaaagh!! I'm the huge, scary Tutanko ...
+   A0:  		Set   *Flag_ISK_13  .True
+   B0:  		Call  DisablePlayerInput        ( .False )
+   C0:  		Call  802D5830      ( 00000000 )
+   D0:  		Call  FadeInMusic   ( 00000000 .Song:DryDryRuins 00000000 000007D0 00000000 0000007F )
+   F4:  		Call  FadeOutMusic  ( 00000001 000007D0 )
+  108:  	EndThread
+  110:  	Return
+  118:  EndIf
+  120:  Switch  *StoryProgress
+  12C:  	Case  <  FFFFFFC7
+  138:  		Call  SetMusicTrack ( 00000000 .Song:DryDryRuins 00000000 00000008 )
+  154:  	Case  <  FFFFFFC8
+  160:  		Call  SetMusicTrack ( 00000000 .Song:RuinsBasement 00000000 00000008 )
+  17C:  	Case  >=  FFFFFFC8
+  188:  		Call  SetMusicTrack ( 00000000 .Song:DryDryRuins 00000000 00000008 )
+  1A4:  EndSwitch
+  1AC:  Return
+  1B4:  End
+}
+
+PADDING: 8024021C to 80240220 (0000021C to 00000220)
+00000000
+
+#new:Script $Script_ExitWalk_80240220
+{
+    0:  SetGroup  0000001B
+    C:  Call  UseExitHeading    ( 00000028 ~Entry:Entry0 )
+   20:  Exec  ExitWalk
+   2C:  Call  GotoMap   ( $ASCII_802405C0 00000004 ) % sbk_02
+   40:  Wait  100`
+   4C:  Return
+   54:  End
+}
+
+#new:Script $Script_ExitWalk_8024027C
+{
+    0:  SetGroup  0000001B
+    C:  Call  UseExitHeading    ( 00000028 ~Entry:Entry1 )
+   20:  Exec  ExitWalk
+   2C:  Call  GotoMap   ( $ASCII_802405C8 00000000 ) % isk_02
+   40:  Wait  100`
+   4C:  Return
+   54:  End
+}
+
+#new:Script $Script_802402D8
+{
+    0:  Bind  $Script_ExitWalk_80240220 .Trigger:FloorAbove ~Collider:deiliw 00000001 00000000
+   1C:  Bind  $Script_ExitWalk_8024027C .Trigger:FloorAbove ~Collider:deilie 00000001 00000000
+   38:  Return
+   40:  End
+}
+
+#new:Script $Script_EnterWalk_80240320
+{
+    0:  Call  GetLoadType   ( *Var[1] )
+   10:  If  *Var[1]  ==  00000001
+   20:  	Exec  EnterSavePoint
+   2C:  	Exec  $Script_802402D8
+   38:  	Return
+   40:  EndIf
+   48:  Set   *Var[0]  $Script_802402D8
+   58:  Exec  EnterWalk
+   64:  Return
+   6C:  End
+}
+
+#new:Script_Main $Script_Main
+{
+    0:  Set   *WorldMapLocation  .Location:DryDryRuins
+   10:  Call  SetSpriteShading  ( FFFFFFFF )
+   20:  Call  SetCamPerspective ( .Cam:Default 00000003 00000019 00000010 00001000 )
+   40:  Call  SetCamBGColor     ( .Cam:Default 00000000 00000000 00000000 )
+   5C:  Call  SetCamLeadPlayer  ( .Cam:Default .False )
+   70:  Call  SetCamEnabled     ( .Cam:Default .True )
+   84:  Set   *Flag_MAP_0C  .True
+   94:  ExecWait  $Script_MakeEntities
+   A0:  Exec  $Script_80240060
+   AC:  Exec  $Script_80240490
+   B8:  Exec  $Script_EnterWalk_80240320
+   C4:  Wait  1`
+   D0:  Return
+   D8:  End
+}
+
+PADDING: 80240474 to 80240480 (00000474 to 00000480)
+00000000 00000000 00000000
+
+#new:DisplayList $DisplayList_80240480
+{
+	G_SetOtherMode_H (G_MDSFT_ALPHADITHER, G_AD_NOISE)
+	G_ENDDL
+}
+
+#new:Script $Script_80240490
+{
+    0:  Call  SetTexPanner      ( ~Model:o99 00000002 )
+   14:  Call  EnableTexPanning  ( ~Model:o99 .True )
+   28:  Set   *Var[0]  00000000
+   38:  Call  802C9428  ( 00000000 $DisplayList_80240480 00000000 )
+   50:  Call  SetModelFlags     ( ~Model:o99 00000010 .True )
+   68:  Label  0
+   74:  Add   *Var[0]  00000046
+   84:  Call  SetTexPanOffset   ( 00000002 00000000 *Var[0] 00000000 )
+   A0:  If  *Var[0]  >  00004000
+   B0:  	Add   *Var[0]  FFFFC000
+   C0:  EndIf
+   C8:  Wait  1`
+   D4:  Goto  0
+   E0:  Return
+   E8:  End
+}
+
+#new:Script $Script_MakeEntities
+{
+    0:  Call  MakeEntity    ( .Entity:SavePoint ~Vec4d:Entity80240580 80000000 )
+   24:  Return
+   2C:  End
+}
+
+PADDING: 802405B4 to 802405C0 (000005B4 to 000005C0)
+00000000 00000000 00000000
+
+#new:ASCII $ASCII_802405C0
+{
+	"sbk_02"
+}
+
+#new:ASCII $ASCII_802405C8
+{
+	"isk_02"
+}
+

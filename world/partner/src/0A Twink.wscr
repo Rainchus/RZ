@@ -1,0 +1,114 @@
+% Script File: 0A Twink.wscr
+% Decoded from: 325070 to 3251D0 (0A Twink)
+
+#new:Function $Function_Init
+{
+    0:  ADDIU     V0, R0, 14
+    4:  SH        V0, A8 (A0)
+    8:  JR        RA
+    C:  SH        V0, A6 (A0)
+}
+
+#new:Function $Function_802BD110
+{
+    0:  ADDIU     SP, SP, FFE8
+    4:  SW        RA, 14 (SP)
+    8:  SW        S0, 10 (SP)
+    C:  BEQ       A1, R0, .o1C
+   10:  LW        S0, 14C (A0)
+   14:  JAL       800EECC4
+   18:  COPY      A0, S0
+        .o1C
+   1C:  JAL       800EECE8
+   20:  COPY      A0, S0
+   24:  LW        RA, 14 (SP)
+   28:  LW        S0, 10 (SP)
+   2C:  SLTU      V0, R0, V0
+   30:  JR        RA
+   34:  ADDIU     SP, SP, 18
+}
+
+#new:Function $Function_802BD148
+{
+    0:  ADDIU     SP, SP, FFE0
+    4:  SW        S1, 14 (SP)
+    8:  LIA       S1, 8010F290
+   10:  SW        RA, 18 (SP)
+   14:  SW        S0, 10 (SP)
+   18:  LW        S0, 14C (A0)
+   1C:  BEQ       A1, R0, .o2C
+   20:  COPY      A0, S0
+   24:  JAL       ~Func:enable_partner_flying
+   28:  ADDIU     A1, R0, 1
+        .o2C
+   2C:  JAL       ~Func:update_player_move_history
+   30:  COPY      A0, S0
+   34:  JAL       800ED5D0
+   38:  COPY      A0, S0
+   3C:  LW        V0, 320 (S1)
+   40:  ADDIU     V0, V0, 1
+   44:  SW        V0, 320 (S1)
+   48:  LW        RA, 18 (SP)
+   4C:  LW        S1, 14 (SP)
+   50:  LW        S0, 10 (SP)
+   54:  CLEAR     V0
+   58:  JR        RA
+   5C:  ADDIU     SP, SP, 20
+}
+
+#new:Function $Function_802BD1A8
+{
+    0:  JR        RA
+    4:  ADDIU     V0, R0, 2
+}
+
+#new:Function $Function_802BD1B0
+{
+    0:  ADDIU     SP, SP, FFE8
+    4:  SW        RA, 14 (SP)
+    8:  SW        S0, 10 (SP)
+    C:  BEQ       A1, R0, .o1C
+   10:  LW        S0, 14C (A0)
+   14:  JAL       800EE994
+   18:  COPY      A0, S0
+        .o1C
+   1C:  JAL       800EE9B8
+   20:  COPY      A0, S0
+   24:  LW        RA, 14 (SP)
+   28:  LW        S0, 10 (SP)
+   2C:  SLTU      V0, R0, V0
+   30:  JR        RA
+   34:  ADDIU     SP, SP, 18
+}
+
+PADDING: 802BD1E8 to 802BD1F0 (00325158 to 00325160)
+00000000 00000000
+
+#new:Script $Script_???_A
+{
+    0:  Call  $Function_802BD110 ( )
+    C:  Return
+   14:  End
+}
+
+#new:Script $Script_???_B
+{
+    0:  Call  $Function_802BD148 ( )
+    C:  Return
+   14:  End
+}
+
+#new:Script $Script_UseAbility
+{
+    0:  Call  $Function_802BD1A8 ( )
+    C:  Return
+   14:  End
+}
+
+#new:Script $Script_???_D
+{
+    0:  Call  $Function_802BD1B0 ( )
+    C:  Return
+   14:  End
+}
+

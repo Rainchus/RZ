@@ -1,0 +1,211 @@
+@ $Script_8024FD70
+{
+    0:  Call  DisablePlayerInput    ( .True )
+        Call  $SetBPto5 ()
+   10:  Thread
+   18:  	Wait  5`
+   24:  	Call  SetMusicTrack ( 00000000 .Song:MailCall 00000000 00000008 )
+   40:  EndThread
+   48:  Call  InterpPlayerYaw   ( 0000005A 00000000 )
+   5C:  Call  SetPlayerPos  ( FFFFFFCE 0000001E FFFFFFB0 )
+   74:  Call  SetNpcPos     ( 00000001 000000DC 0000001E FFFFFFB0 )
+   90:  Call  SetNpcPos     ( 00000000 000002D0 000000DC FFFFFF6A )
+   AC:  Call  SetNpcYaw     ( 00000000 0000010E )
+   C0:  Call  EnableGroup   ( ~Model:g94 .False )
+   D4:  Call  EnableGroup   ( ~Model:g100 .True )
+   E8:  Call  UseSettingsFrom   ( .Cam:Default 00000226 00000000 00000014 )
+  104:  Call  SetPanTarget  ( .Cam:Default 00000226 00000000 00000014 )
+  120:  Call  SetCamDistance    ( .Cam:Default 00000226 )
+  134:  Call  SetCamPitch   ( .Cam:Default *Fixed[15.0] *Fixed[-14.0] )
+  14C:  Call  SetCamSpeed   ( .Cam:Default *Fixed[90.0] )
+  160:  Call  PanToTarget   ( .Cam:Default 00000000 00000001 )
+  178:  Wait  1`
+  184:  Call  SetCamDistance    ( .Cam:Default 000001C2 )
+  198:  Call  SetCamSpeed   ( .Cam:Default *Fixed[0.7] )
+  1AC:  Call  PanToTarget   ( .Cam:Default 00000000 00000001 )
+  1C4:  Thread
+  1CC:  	Wait  10`
+  1D8:  	Call  MakeLerp  ( 00000000 00000046 0000003C .Easing:Linear )
+  1F4:  	Loop
+  200:  		Call  UpdateLerp ( )
+  20C:  		Call  TranslateGroup    ( ~Model:g108 *Var[0] 00000000 00000000 )
+  228:  		SetF  *Var[2]  00000000
+  238:  		SubF  *Var[2]  *Var[0]
+  248:  		Call  TranslateGroup    ( ~Model:g106 *Var[2] 00000000 00000000 )
+  264:  		If  *Var[1]  ==  00000000
+  274:  			BreakLoop
+  27C:  		EndIf
+  284:  		Wait  1`
+  290:  	EndLoop
+  298:  EndThread
+  2A0:  Thread
+  2A8:  	Wait  30`
+  2B4:  	Call  MakeLerp  ( 00000000 00000032 00000028 .Easing:Linear )
+  2D0:  	Loop
+  2DC:  		Call  UpdateLerp ( )
+  2E8:  		Call  TranslateGroup    ( ~Model:g109 *Var[0] 00000000 00000000 )
+  304:  		SetF  *Var[2]  00000000
+  314:  		SubF  *Var[2]  *Var[0]
+  324:  		Call  TranslateGroup    ( ~Model:g107 *Var[2] 00000000 00000000 )
+  340:  		If  *Var[1]  ==  00000000
+  350:  			BreakLoop
+  358:  		EndIf
+  360:  		Wait  1`
+  36C:  	EndLoop
+  374:  EndThread
+  37C:  Thread
+  384:  	Wait  50`
+  390:  	Call  MakeLerp  ( 00000000 00000032 00000028 .Easing:Linear )
+  3AC:  	Loop
+  3B8:  		Call  UpdateLerp ( )
+  3C4:  		Call  TranslateGroup    ( ~Model:g105 *Var[0] 00000000 00000000 )
+  3E0:  		Call  TranslateGroup    ( ~Model:g102 *Var[0] 00000000 00000000 )
+  3FC:  		SetF  *Var[2]  00000000
+  40C:  		SubF  *Var[2]  *Var[0]
+  41C:  		Call  TranslateGroup    ( ~Model:g103 *Var[2] 00000000 00000000 )
+  438:  		Call  TranslateGroup    ( ~Model:g104 *Var[2] 00000000 00000000 )
+  454:  		Call  TranslateGroup    ( ~Model:g101 *Var[2] 00000000 00000000 )
+  470:  		If  *Var[1]  ==  00000000
+  480:  			BreakLoop
+  488:  		EndIf
+  490:  		Wait  1`
+  49C:  	EndLoop
+  4A4:  EndThread
+  4AC:  Wait  120`
+  4B8:  Call  NpcFlyTo  ( 00000000 000001AE 00000014 FFFFFF5B 0000003C FFFFFFF6 .Easing:Linear )
+  4E0:  Call  InterpNpcYaw      ( 00000000 0000002D 0000000A )
+  4F8:  Wait  20`
+  504:  Call  PlaySoundAtNpc    ( 00000000 000000E0 00000000 )
+  51C:  Thread
+  524:  	Call  TranslateModel    ( ~Model:o222 00000002 00000000 00000000 )
+  540:  	Call  TranslateModel    ( ~Model:o223 00000002 00000000 00000000 )
+  55C:  	Call  TranslateModel    ( ~Model:o224 00000002 00000000 00000000 )
+  578:  	Wait  1`
+  584:  	Call  TranslateModel    ( ~Model:o222 FFFFFFFD 00000000 00000000 )
+  5A0:  	Call  TranslateModel    ( ~Model:o223 FFFFFFFD 00000000 00000000 )
+  5BC:  	Call  TranslateModel    ( ~Model:o224 FFFFFFFD 00000000 00000000 )
+  5D8:  	Wait  1`
+  5E4:  	Call  TranslateModel    ( ~Model:o222 00000002 00000000 00000000 )
+  600:  	Call  TranslateModel    ( ~Model:o223 00000002 00000000 00000000 )
+  61C:  	Call  TranslateModel    ( ~Model:o224 00000002 00000000 00000000 )
+  638:  	Wait  1`
+  644:  	Call  TranslateModel    ( ~Model:o222 FFFFFFFD 00000000 00000000 )
+  660:  	Call  TranslateModel    ( ~Model:o223 FFFFFFFD 00000000 00000000 )
+  67C:  	Call  TranslateModel    ( ~Model:o224 FFFFFFFD 00000000 00000000 )
+  698:  	Wait  1`
+  6A4:  	Call  TranslateModel    ( ~Model:o222 00000000 00000000 00000000 )
+  6C0:  	Call  TranslateModel    ( ~Model:o223 00000000 00000000 00000000 )
+  6DC:  	Call  TranslateModel    ( ~Model:o224 00000000 00000000 00000000 )
+  6F8:  EndThread
+  700:  Wait  35`
+  70C:  Call  InterpNpcYaw  ( 00000000 000000DC 00000005 )
+  724:  Wait  10`
+  730:  Call  SpeakToPlayer ( 00000000 00040006 00040001 00000005 0000001E ) % Mail call!
+  750:  Wait  10`
+  75C:  Call  NpcFlyTo      ( 00000000 00000168 00000104 0000003C 0000003C FFFFFFF6 .Easing:Linear )
+  784:  Wait  30`
+  790:  Exec  $Script_8024FCE4
+  79C:  Wait  10`
+  7A8:  Call  SetNpcAnimation   ( 00000001 0082000A )
+  7BC:  Exec  $Script_8024F5A4 *Var[A]
+  7CC:  Call  SetNpcSpeed   ( 00000001 *Fixed[4.0] )
+  7E0:  Call  NpcMoveTo     ( 00000001 000001C2 FFFFFFB0 00000000 )
+  7FC:  Call  NpcMoveTo     ( 00000001 000001AE FFFFFF5B 00000000 )
+  818:  Call  SetNpcAnimation   ( 00000001 00820004 )
+  82C:  Kill  *Var[A]
+  838:  Wait  20`
+  844:  Call  PlaySoundAtNpc    ( 00000001 000000E0 00000000 )
+  85C:  Thread
+  864:  	Call  TranslateModel    ( ~Model:o222 00000001 00000000 00000000 )
+  880:  	Call  TranslateModel    ( ~Model:o223 00000001 00000000 00000000 )
+  89C:  	Call  TranslateModel    ( ~Model:o224 00000001 00000000 00000000 )
+  8B8:  	Wait  1`
+  8C4:  	Call  TranslateModel    ( ~Model:o222 FFFFFFFE 00000000 00000000 )
+  8E0:  	Call  TranslateModel    ( ~Model:o223 FFFFFFFE 00000000 00000000 )
+  8FC:  	Call  TranslateModel    ( ~Model:o224 FFFFFFFE 00000000 00000000 )
+  918:  	Wait  1`
+  924:  	Call  TranslateModel    ( ~Model:o222 00000001 00000000 00000000 )
+  940:  	Call  TranslateModel    ( ~Model:o223 00000001 00000000 00000000 )
+  95C:  	Call  TranslateModel    ( ~Model:o224 00000001 00000000 00000000 )
+  978:  	Wait  1`
+  984:  	Call  TranslateModel    ( ~Model:o222 FFFFFFFE 00000000 00000000 )
+  9A0:  	Call  TranslateModel    ( ~Model:o223 FFFFFFFE 00000000 00000000 )
+  9BC:  	Call  TranslateModel    ( ~Model:o224 FFFFFFFE 00000000 00000000 )
+  9D8:  	Wait  1`
+  9E4:  	Call  TranslateModel    ( ~Model:o222 00000000 00000000 00000000 )
+  A00:  	Call  TranslateModel    ( ~Model:o223 00000000 00000000 00000000 )
+  A1C:  	Call  TranslateModel    ( ~Model:o224 00000000 00000000 00000000 )
+  A38:  EndThread
+  A40:  Wait  2`
+  A4C:  Call  SetNpcAnimation   ( 00000001 00820005 )
+  A60:  Wait  40`
+  A6C:  Call  InterpNpcYaw  ( 00000001 0000010E 00000005 )
+  A84:  Call  SetNpcAnimation   ( 00000001 0082000B )
+  A98:  Exec  $Script_8024F5A4 *Var[A]
+  AA8:  Call  NpcMoveTo     ( 00000001 000001C2 FFFFFFB0 00000000 )
+  AC4:  Call  NpcMoveTo     ( 00000001 00000122 FFFFFFBA 00000000 )
+  AE0:  Kill  *Var[A]
+  AEC:  Call  EnableGroup   ( ~Model:g20 .True )
+  B00:  Call  EnableGroup   ( ~Model:g21 .True )
+  B14:  Call  EnableGroup   ( ~Model:g49 .True )
+  B28:  Call  EnableModel   ( ~Model:g56 .True )
+  B3C:  Call  $Function_80241C9C ( )
+  B48:  Call  RotateGroup   ( ~Model:g60 0000005A 00000001 00000000 00000000 )
+  B68:  Call  RotateGroup   ( ~Model:g34 0000005A FFFFFFFF 00000000 00000000 )
+  B88:  Call  EnableGroup   ( ~Model:g60 .False )
+  B9C:  Call  EnableGroup   ( ~Model:g34 .False )
+  BB0:  Call  UseSettingsFrom   ( .Cam:Default 000000FA 0000001E FFFFFFB0 )
+  BCC:  Call  SetPanTarget  ( .Cam:Default 000000FA 0000001E FFFFFFB0 )
+  BE8:  Call  SetCamSpeed   ( .Cam:Default *Fixed[90.0] )
+  BFC:  Call  PanToTarget   ( .Cam:Default 00000000 00000001 )
+  C14:  Call  $Function_80241D1C ( )
+  C20:  Exec  $Script_8024FB88
+  C2C:  Wait  10`
+  C38:  Call  SetNpcAnimation   ( 00000001 00820009 )
+  C4C:  Exec  $Script_8024F5A4 *Var[A]
+  C5C:  Call  SetNpcSpeed   ( 00000001 *Fixed[2.0] )
+  C70:  Call  NpcMoveTo     ( 00000001 000000F0 FFFFFFB0 00000000 )
+  C8C:  Call  SetNpcAnimation   ( 00000001 00820005 )
+  CA0:  Kill  *Var[A]
+  CAC:  Call  SpeakToPlayer ( 00000001 00820015 00820005 00000000 0000001F ) % Hey, Mario! We got a letter from Princess Peach!
+  CCC:  Wait  10`
+  CD8:  Exec  $Script_8024FAAC
+  CE4:  Thread
+  CEC:  	Call  SetNpcAnimation   ( 00000001 00820009 )
+  D00:  	Exec  $Script_8024F5A4 *Var[A]
+  D10:  	Call  NpcMoveTo ( 00000001 000000E6 FFFFFF7E 00000000 )
+  D2C:  	Call  NpcMoveTo ( 00000001 0000006E FFFFFF92 00000000 )
+  D48:  	Call  SetNpcAnimation   ( 00000001 00820005 )
+  D5C:  	Kill  *Var[A]
+  D68:  	Call  SetNpcVar ( 00000001 00000000 00000000 )
+  D80:  EndThread
+  D88:  Wait  20`
+  D94:  Call  802D1270      ( 00000046 FFFFFFB0 *Fixed[2.0] )
+  DAC:  Call  802D1270      ( 00000046 FFFFFF92 *Fixed[2.0] )
+  DC4:  Wait  10`
+  DD0:  Call  SpeakToPlayer ( 00000001 00820015 00820005 00000000 00000020 ) % I'll read it to you, OK?
+  DF0:  Call  SetNpcAnimation   ( 00000001 00820018 )
+  E04:  Wait  20`
+  E10:  Call  SetNpcAnimation   ( 00000001 00820006 )
+  E24:  Call  SpeakToPlayer ( 00000001 00820016 00820006 00000000 00000021 ) % All right, let's see...
+  E44:  Call  SetNpcAnimation   ( 00000001 00820019 )
+  E58:  Wait  10`
+  E64:  Call  SetMusicTrack ( 00000000 .Song:PrisonerPeachTheme 00000000 00000008 )
+  E80:  Wait  5`
+  E8C:  Call  802D60E8      ( 000000FA )
+  E9C:  Call  GotoMapSpecial    ( $ASCII_80253008 00000003 00000007 ) % osr_00
+  EB4:  Wait  15`
+  EC0:  Call  802D60E8      ( 000000FA )
+  ED0:  Wait  100`
+  EDC:  Return
+  EE4:  End
+}
+
+#new:Function $SetBPto5
+{
+ORI t0, r0, 0005
+LUI v0, 8011
+SB t0, F298 (v0)
+JR RA
+ORI v0, r0, 0002 %return 2 so script interpreter only calls this once
+}

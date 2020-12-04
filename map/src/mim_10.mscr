@@ -1,0 +1,525 @@
+% Script File: mim_10.mscr
+% Decoded from: 0 to 1690 (mim_10)
+
+#new:Function $Function_80240000
+{
+    0:  LAF       F2, 8010EFF0
+    8:  LIF       F0, 100.0
+   10:  NOP
+   14:  C.LT.S    F2, F0
+   18:  NOP
+   1C:  BC1T      .o28
+   20:  CLEAR     V0
+   24:  ADDIU     V0, R0, 2
+        .o28
+   28:  JR        RA
+   2C:  NOP
+}
+
+#new:Function $Function_80240030
+{
+    0:  ADDIU     SP, SP, FFE8
+    4:  SW        RA, 10 (SP)
+    8:  JAL       ~Func:enable_world_fog
+    C:  NOP
+   10:  ADDIU     A0, R0, 10
+   14:  COPY      A1, A0
+   18:  COPY      A2, A0
+   1C:  JAL       ~Func:set_world_fog_color
+   20:  ADDIU     A3, R0, FF
+   24:  LIA       V0, 800B1D80
+   2C:  ADDIU     V1, R0, 14
+   30:  SH        V1, 2C (V0)
+   34:  SH        V1, 2E (V0)
+   38:  ADDIU     V1, R0, 1C
+   3C:  SH        V1, 30 (V0)
+   40:  LW        RA, 10 (SP)
+   44:  ADDIU     V0, R0, 2
+   48:  JR        RA
+   4C:  ADDIU     SP, SP, 18
+}
+
+% Origin: HEURISTIC
+#new:Function $Function_80240080
+{
+    0:  ADDIU     SP, SP, FFE8
+    4:  SW        RA, 10 (SP)
+    8:  JAL       ~Func:enable_world_fog
+    C:  NOP
+   10:  ADDIU     A0, R0, 3DE
+   14:  JAL       ~Func:set_world_fog_dist
+   18:  ADDIU     A1, R0, 3E8
+   1C:  ADDIU     A0, R0, 10
+   20:  COPY      A1, A0
+   24:  COPY      A2, A0
+   28:  JAL       ~Func:set_world_fog_color
+   2C:  ADDIU     A3, R0, FF
+   30:  LIA       V1, 800B1D80
+   38:  ADDIU     V0, R0, 14
+   3C:  SH        V0, 2C (V1)
+   40:  SH        V0, 2E (V1)
+   44:  ADDIU     V0, R0, 1C
+   48:  SH        V0, 30 (V1)
+   4C:  LAW       V1, 8007419C
+   54:  ADDIU     V0, R0, F0
+   58:  SH        V0, 15C (V1)
+   5C:  LW        RA, 10 (SP)
+   60:  ADDIU     V0, R0, 2
+   64:  JR        RA
+   68:  ADDIU     SP, SP, 18
+}
+
+#new:Function $Function_802400EC
+{
+    0:  ADDIU     SP, SP, FFE8
+    4:  SW        S0, 10 (SP)
+    8:  CLEAR     S0
+    C:  BEQ       A1, R0, .o1C
+   10:  SW        RA, 14 (SP)
+   14:  ADDIU     V0, R0, 424
+   18:  SW        V0, 74 (A0)
+        .o1C
+   1C:  LW        V0, 74 (A0)
+   20:  ADDIU     V0, V0, FFFF
+   24:  SW        V0, 74 (A0)
+   28:  SLTI      V0, V0, 3E9
+   2C:  BEQ       V0, R0, .o3C
+   30:  ADDIU     V0, R0, 3E8
+   34:  SW        V0, 74 (A0)
+   38:  ADDIU     S0, R0, 2
+        .o3C
+   3C:  LW        A1, 74 (A0)
+   40:  JAL       ~Func:set_world_fog_dist
+   44:  ADDIU     A0, R0, 3DE
+   48:  COPY      V0, S0
+   4C:  LW        RA, 14 (SP)
+   50:  LW        S0, 10 (SP)
+   54:  JR        RA
+   58:  ADDIU     SP, SP, 18
+}
+
+#new:Function $Function_80240148
+{
+    0:  BEQ       A1, R0, .oC
+    4:  CLEAR     A2
+    8:  SW        R0, 74 (A0)
+        .oC
+    C:  LW        V0, 74 (A0)
+   10:  ADDIU     V0, V0, 4
+   14:  SW        V0, 74 (A0)
+   18:  SLTI      V0, V0, F0
+   1C:  BNE       V0, R0, .o30
+   20:  NOP
+   24:  ADDIU     V0, R0, F0
+   28:  SW        V0, 74 (A0)
+   2C:  ADDIU     A2, R0, 2
+        .o30
+   30:  LAW       V1, 8007419C
+   38:  LHU       V0, 76 (A0)
+   3C:  SH        V0, 15C (V1)
+   40:  JR        RA
+   44:  COPY      V0, A2
+}
+
+#new:EntryList $EntryList
+{
+	~Vec4f:Entry0 % -385.0   20.0   10.0   90.0
+	~Vec4f:Entry1 %  385.0    0.0   10.0  270.0
+}
+
+#new:Header $Header
+{
+	[MainScript]  $Script_Main
+	[EntryList]   $EntryList
+	[EntryCount]  00000002
+	[Background]  80200000
+	[MapTattle]   001900A6
+}
+
+#new:Script $Script_802401F0
+{
+    0:  Switch  *StoryProgress
+    C:  	Case  FFFFFFF3  to  00000005
+   1C:  		Call  SetMusicTrack ( 00000000 .Song:ShyGuyInvasion 00000000 00000008 )
+   38:  	Default
+   40:  		Call  SetMusicTrack ( 00000000 .Song:ToadTown 00000000 00000008 )
+   5C:  EndSwitch
+   64:  Return
+   6C:  End
+}
+
+#new:Script $Script_80240264
+{
+    0:  If  *StoryProgress  ==  FFFFFFCD
+   10:  	Exec  $Script_802401F0
+   1C:  	Return
+   24:  EndIf
+   2C:  Call  GetLoadType   ( *Var[1] )
+   3C:  If  *Var[1]  ==  00000001
+   4C:  	Exec  $Script_802401F0
+   58:  	Return
+   60:  EndIf
+   68:  Call  GetPlayerPos  ( *Var[1] *Var[2] *Var[3] )
+   80:  If  *Var[1]  <  00000000
+   90:  	Exec  $Script_802401F0
+   9C:  	Wait  30`
+   A8:  Else
+   B0:  	Call  SetMusicTrack ( 00000000 .Song:ForeverForest 00000000 00000008 )
+   CC:  	Wait  15`
+   D8:  	Call  ClearAmbientSounds    ( 000000FA )
+   E8:  	Wait  15`
+   F4:  	Goto  14
+  100:  EndIf
+  108:  Label  A
+  114:  Wait  1`
+  120:  Call  GetPlayerPos  ( *Var[1] *Var[2] *Var[3] )
+  138:  If  *Var[1]  >=  00000064
+  148:  	Call  FadeOutMusic  ( 00000000 000003E8 )
+  15C:  	Wait  15`
+  168:  	Wait  15`
+  174:  	Call  SetMusicTrack ( 00000000 .Song:ForeverForest 00000000 00000008 )
+  190:  	Wait  30`
+  19C:  	Goto  14
+  1A8:  EndIf
+  1B0:  Goto  A
+  1BC:  Label  14
+  1C8:  Wait  1`
+  1D4:  Call  GetPlayerPos  ( *Var[1] *Var[2] *Var[3] )
+  1EC:  If  *Var[1]  <  00000000
+  1FC:  	Call  FadeOutMusic  ( 00000000 000003E8 )
+  210:  	Wait  30`
+  21C:  	Exec  $Script_802401F0
+  228:  	Wait  30`
+  234:  	Goto  A
+  240:  EndIf
+  248:  Goto  14
+  254:  Return
+  25C:  End
+}
+
+PADDING: 802404C8 to 802404D0 (000004C8 to 000004D0)
+00000000 00000000
+
+#new:Script $Script_MakeEntities
+{
+    0:  Call  MakeEntity    ( .Entity:SavePoint ~Vec4d:Entity802404D0 80000000 )
+   24:  Return
+   2C:  End
+}
+
+PADDING: 80240504 to 80240510 (00000504 to 00000510)
+00000000 00000000 00000000
+
+#new:Script $Script_ExitWalk_80240510
+{
+    0:  SetGroup  0000001B
+    C:  Call  UseExitHeading    ( 0000003C ~Entry:Entry0 )
+   20:  Exec  ExitWalk
+   2C:  Call  GotoMap   ( $ASCII_80241670 00000001 ) % mac_02
+   40:  Wait  100`
+   4C:  Return
+   54:  End
+}
+
+#new:Script $Script_ExitWalk_8024056C
+{
+    0:  SetGroup  0000001B
+    C:  Call  UseExitHeading    ( 0000003C ~Entry:Entry1 )
+   20:  Exec  ExitWalk
+   2C:  If  *StoryProgress  ==  FFFFFFCE
+   3C:  	If  *Flag_EVT_03  ==  .False
+   4C:  		Set   *Flag_EVT_03  .True
+   5C:  		Call  FadeOutMusic      ( 00000000 000005DC )
+   70:  		Call  GotoMapSpecial    ( $ASCII_80241680 00000003 00000006 ) % kmr_22
+   88:  		Wait  100`
+   94:  		Return
+   9C:  	EndIf
+   A4:  EndIf
+   AC:  Call  GotoMap   ( $ASCII_80241678 00000001 ) % mim_01
+   C0:  Wait  100`
+   CC:  Return
+   D4:  End
+}
+
+#new:Script $Script_80240648
+{
+    0:  Bind  $Script_ExitWalk_80240510 .Trigger:FloorAbove ~Collider:deiliw 00000001 00000000
+   1C:  Bind  $Script_ExitWalk_8024056C .Trigger:FloorAbove ~Collider:deilie 00000001 00000000
+   38:  Return
+   40:  End
+}
+
+#new:Script $Script_EnterWalk_80240690
+{
+    0:  Call  GetLoadType   ( *Var[1] )
+   10:  If  *Var[1]  ==  00000001
+   20:  	Exec  EnterSavePoint
+   2C:  	Exec  $Script_80240648
+   38:  	Return
+   40:  EndIf
+   48:  Set   *Var[0]  $Script_80240648
+   58:  Exec  EnterWalk
+   64:  Return
+   6C:  End
+}
+
+#new:Script_Main $Script_Main
+{
+    0:  Set   *WorldMapLocation  .Location:ToadTown
+   10:  Call  SetSpriteShading  ( FFFFFFFF )
+   20:  Call  SetCamPerspective ( .Cam:Default 00000003 00000019 00000010 00001000 )
+   40:  Call  SetCamBGColor     ( .Cam:Default 00000000 00000000 00000000 )
+   5C:  Call  SetCamEnabled     ( .Cam:Default .True )
+   70:  Call  MakeNpcs  ( 00000001 $NpcGroupList_80241640 )
+   84:  Exec  $Script_80240FC0
+   90:  ExecWait  $Script_MakeEntities
+   9C:  Exec  $Script_80240264
+   A8:  Exec  $Script_EnterWalk_80240690
+   B4:  Wait  1`
+   C0:  Set   *Flag_Rowf_Badges_Chosen  .False
+   D0:  Return
+   D8:  End
+}
+
+PADDING: 802407E4 to 802407F0 (000007E4 to 000007F0)
+00000000 00000000 00000000
+
+#new:NpcSettings $NpcSettings_802407F0
+{
+	00000000 00180018 00000000 00000000 00000000 00000000 00000000 00000000
+	00000000 00000000 00630000
+}
+
+#new:NpcSettings $NpcSettings_8024081C
+{
+	00000000 00200018 00000000 00000000 00000000 00000000 00000000 00000000
+	00000000 00000000 00630000
+}
+
+#new:Script $Script_80240848
+{
+    0:  ChildThread
+    8:  	Call  GetPlayerPos      ( *Var[A] *Var[B] *Var[C] )
+   20:  	Call  UseSettingsFrom   ( .Cam:Default *Var[A] *Var[B] *Var[C] )
+   3C:  	Call  SetCamSpeed       ( .Cam:Default *Fixed[90.0] )
+   50:  	Loop
+   5C:  		Call  SetCamDistance    ( .Cam:Default 00000190 )
+   70:  		Call  PanToTarget       ( .Cam:Default 00000000 00000001 )
+   88:  		Wait  1`
+   94:  		Call  SetCamDistance    ( .Cam:Default 000001C2 )
+   A8:  		Call  PanToTarget       ( .Cam:Default 00000000 00000001 )
+   C0:  		Wait  1`
+   CC:  	EndLoop
+   D4:  EndChildThread
+   DC:  Call  SetPlayerAnimation    ( 0001002B )
+   EC:  Wait  5`
+   F8:  Call  SpeakToPlayer ( 00000000 00BF0009 00BF0009 00000000 000E0002 ) % And if you don't come...we'll GET YOU!! BOOO!
+  118:  Call  SetPlayerAnimation    ( 00010002 )
+  128:  Return
+  130:  End
+}
+
+#new:Script $Script_80240980
+{
+    0:  Call  $Function_80240000 ( )
+    C:  Call  SetCamPerspective ( .Cam:Default 00000003 00000019 00000010 0000028A )
+   2C:  Call  $Function_80240030 ( )
+   38:  Thread
+   40:  	Call  $Function_802400EC ( )
+   4C:  EndThread
+   54:  Thread
+   5C:  	Call  $Function_80240148 ( )
+   68:  EndThread
+   70:  Call  DisablePlayerInput    ( .True )
+   80:  Call  SetNpcPos ( 00000000 000000C8 0000002C 00000000 )
+   9C:  Call  802CFD30  ( 00000000 00000007 00000000 00000000 00000000 00000000 )
+   C0:  Set   *MapVar[0]  00000001
+   D0:  Call  SetMusicTrack     ( 00000000 .Song:BoosMansion 00000000 00000008 )
+   EC:  Wait  20`
+   F8:  Call  SetPlayerAnimation    ( 0001002A )
+  108:  Wait  10`
+  114:  Call  SetPlayerAnimation    ( 00080022 )
+  124:  Wait  30`
+  130:  Call  SetPlayerAnimation    ( 0001002A )
+  140:  Wait  10`
+  14C:  Call  InterpPlayerYaw   ( 0000010E 00000000 )
+  160:  Wait  20`
+  16C:  Call  InterpPlayerYaw   ( 0000005A 00000000 )
+  180:  Wait  20`
+  18C:  Call  PlaySoundAtNpc    ( 00000000 .Sound:BooVanish 00000000 )
+  1A4:  SetF  *Var[0]  *Fixed[0.0]
+  1B4:  Loop  00000014
+  1C0:  	AddF  *Var[0]  *Fixed[12.0]
+  1D0:  	Call  802CFD30  ( 00000000 00000007 *Var[0] 00000000 00000000 00000000 )
+  1F4:  	Wait  1`
+  200:  EndLoop
+  208:  Wait  20`
+  214:  Call  GetNpcPos     ( 00000000 *Var[A] *Var[B] *Var[C] )
+  230:  Call  UseSettingsFrom   ( .Cam:Default *Var[A] *Var[B] *Var[C] )
+  24C:  Call  SetPanTarget  ( .Cam:Default *Var[A] *Var[B] *Var[C] )
+  268:  Call  SetCamDistance    ( .Cam:Default 0000010E )
+  27C:  Call  SetCamSpeed   ( .Cam:Default *Fixed[90.0] )
+  290:  Call  SetCamLeadPlayer  ( .Cam:Default .False )
+  2A4:  Call  PanToTarget   ( .Cam:Default 00000000 00000001 )
+  2BC:  Wait  10`
+  2C8:  Call  SpeakToPlayer ( 00000000 00BF0004 00BF0001 00000000 000E0000 ) % Pardon me, sir... Would you happen to be Mario? Ho ...
+  2E8:  Call  GetPlayerPos  ( *Var[0] *Var[1] *Var[2] )
+  300:  Call  UseSettingsFrom   ( .Cam:Default *Var[0] *Var[1] *Var[2] )
+  31C:  Call  SetPanTarget  ( .Cam:Default *Var[0] *Var[1] *Var[2] )
+  338:  Call  SetCamLeadPlayer  ( .Cam:Default .True )
+  34C:  Wait  1`
+  358:  Call  PanToTarget   ( .Cam:Default 00000000 00000000 )
+  370:  Wait  30`
+  37C:  Call  SpeakToPlayer ( 00000000 00BF0004 00BF0001 00000000 000E0001 ) % Please make haste! We shall await your arrival wit ...
+  39C:  Call  PlaySoundAtNpc    ( 00000000 .Sound:BooAppear 00000000 )
+  3B4:  SetF  *Var[0]  *Fixed[240.0]
+  3C4:  Loop  00000014
+  3D0:  	SubF  *Var[0]  *Fixed[12.0]
+  3E0:  	Call  802CFD30  ( 00000000 00000007 *Var[0] 00000000 00000000 00000000 )
+  404:  	Wait  1`
+  410:  EndLoop
+  418:  Wait  25`
+  424:  Call  SetNpcAnimation   ( 00000000 00BF0009 )
+  438:  Thread
+  440:  	Call  GetNpcPos     ( 00000000 *Var[A] *Var[B] *Var[C] )
+  45C:  	Sub   *Var[B]  00000028
+  46C:  	Call  SetNpcPos     ( 00000000 *Var[A] *Var[B] *Var[C] )
+  488:  	Call  SetNpcScale   ( 00000000 *Fixed[3.0] *Fixed[3.0] *Fixed[3.0] )
+  4A4:  	SetF  *Var[0]  *Fixed[0.0]
+  4B4:  	Loop  00000014
+  4C0:  		AddF  *Var[0]  *Fixed[12.0]
+  4D0:  		Call  802CFD30  ( 00000000 00000007 *Var[0] 00000000 00000000 00000000 )
+  4F4:  		Wait  1`
+  500:  	EndLoop
+  508:  EndThread
+  510:  Call  PlaySoundAtNpc    ( 00000000 00000292 00000000 )
+  528:  ExecWait  $Script_80240848
+  534:  Call  SetCamDistance    ( .Cam:Default 000001C2 )
+  548:  Call  PanToTarget       ( .Cam:Default 00000000 00000001 )
+  560:  Wait  1`
+  56C:  Call  PanToTarget       ( .Cam:Default 00000000 00000000 )
+  584:  SetF  *Var[0]  *Fixed[240.0]
+  594:  Loop  00000014
+  5A0:  	SubF  *Var[0]  *Fixed[12.0]
+  5B0:  	Call  802CFD30  ( 00000000 00000007 *Var[0] 00000000 00000000 00000000 )
+  5D4:  	Wait  1`
+  5E0:  EndLoop
+  5E8:  Set   *StoryProgress  FFFFFFCE
+  5F8:  Exec  $Script_80240264
+  604:  Call  SetNpcPos ( 00000000 00000000 FFFFFC18 00000000 )
+  620:  Call  DisablePlayerInput    ( .False )
+  630:  Return
+  638:  End
+}
+
+#new:Script $Script_80240FC0
+{
+    0:  Switch  *StoryProgress
+    C:  	Case  <  FFFFFFCD
+   18:  		Return
+   20:  	Case  <  FFFFFFCE
+   2C:  		Exec  $Script_80240980
+   38:  	Case  FFFFFFCE  to  FFFFFFF1
+   48:  EndSwitch
+   50:  Return
+   58:  End
+}
+
+#new:Script $Script_Init_80241020
+{
+    0:  Switch  *StoryProgress
+    C:  	Case  <  FFFFFFCD
+   18:  		Call  RemoveNpc ( .Npc:Self )
+   28:  	Case  <  FFFFFFCE
+   34:  		Set   *Flag_KMR_44  .True
+   44:  	Case  >=  FFFFFFCE
+   50:  		Call  RemoveNpc ( .Npc:Self )
+   60:  EndSwitch
+   68:  Return
+   70:  End
+}
+
+#new:Script $Script_Idle_80241098
+{
+    0:  Call  802D2508 ( )
+    C:  Call  DisablePlayerInput    ( .True )
+   1C:  Set   *MapVar[0]  00000001
+   2C:  Call  GetNpcPos ( .Npc:Self *Var[0] *Var[1] *Var[2] )
+   48:  Call  SetCamProperties  ( .Cam:Default *Fixed[3.0] *Var[0] *Var[1] *Var[2] 0000012C 0000000F FFFFFFF9 )
+   74:  Call  SpeakToPlayer     ( .Npc:Self 00210016 00210003 00000005 000E0023 ) % Oh! I made it out of the forest! I could kiss this ...
+   94:  Wait  15`
+   A0:  Call  SetNpcAnimation   ( .Npc:Self 0021000B )
+   B4:  Sub   *Var[0]  000000C8
+   C4:  Call  NpcMoveTo ( .Npc:Self *Var[0] *Var[2] 00000019 )
+   E0:  Call  ResetCam  ( .Cam:Default *Fixed[90.0] )
+   F4:  Set   *Flag_MIM_05  .True
+  104:  Set   *MapVar[0]  00000000
+  114:  Call  DisablePlayerInput    ( .False )
+  124:  Call  RemoveNpc ( .Npc:Self )
+  134:  Return
+  13C:  End
+}
+
+#new:Script $Script_Init_802411DC
+{
+    0:  Call  BindNpcIdle   ( .Npc:Self $Script_Idle_80241098 )
+   14:  If  *Flag_MIM_05  ==  .True
+   24:  	Call  RemoveNpc ( .Npc:Self )
+   34:  	Return
+   3C:  EndIf
+   44:  If  *Flag_MIM_03  ==  .False
+   54:  	Call  RemoveNpc ( .Npc:Self )
+   64:  	Return
+   6C:  EndIf
+   74:  Return
+   7C:  End
+}
+
+#new:NpcGroup $NpcGroup_80241260
+{
+	00000000 $NpcSettings_802407F0 ~Vec3f:NPC_80241260 % 0 -1000 0
+	00000801 $Script_Init_80241020 00000000 00000000 0000010E
+	~NoDrops
+	~Movement:NPC_80241260
+	~AnimationTable:NPC_80241260 % .Sprite:Bootler
+	00000000 00000000 00000000 00000000 % no tattle string
+}
+
+#new:NpcGroup $NpcGroup_80241450
+{
+	00000001 $NpcSettings_8024081C ~Vec3f:NPC_80241450 % 0 0 0
+	00200D04 $Script_Init_802411DC 00000000 00000000 0000010E
+	~NoDrops
+	~Movement:NPC_80241450
+	~AnimationTable:NPC_80241450 % .Sprite:JrTroopa
+	00000000 00000000 00000000 00000000 % no tattle string
+}
+
+#new:NpcGroupList $NpcGroupList_80241640
+{
+	00000001 $NpcGroup_80241260 00000000
+	00000001 $NpcGroup_80241450 00000000
+	00000000 00000000 00000000
+}
+
+PADDING: 80241664 to 80241670 (00001664 to 00001670)
+00000000 00000000 00000000
+
+#new:ASCII $ASCII_80241670
+{
+	"mac_02"
+}
+
+#new:ASCII $ASCII_80241678
+{
+	"mim_01"
+}
+
+#new:ASCII $ASCII_80241680
+{
+	"kmr_22"
+}
+
+PADDING: 80241688 to 80241690 (00001688 to 00001690)
+00000000 00000000
+

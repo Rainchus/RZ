@@ -1,0 +1,930 @@
+% Script File: dgb_00.mscr
+% Decoded from: 0 to 37E0 (dgb_00)
+
+#new:Function_Init $Function_Init
+{
+    0:  ADDIU     SP, SP, FFE8
+    4:  LIA       A0, 800D9230
+    C:  LIA       A1, $ASCII_802437A0
+   14:  SW        RA, 10 (SP)
+   18:  JAL       ~Func:sprintf
+   1C:  NOP
+   20:  LIA       A0, 800D91E0
+   28:  LIA       A1, $ASCII_802437B0
+   2C:  JAL       ~Func:sprintf
+   30:  RESERVED
+   34:  LIA       A0, 800B0CF0
+   3C:  LIA       A1, $ASCII_802437BC
+   40:  JAL       ~Func:sprintf
+   44:  RESERVED
+   48:  LW        RA, 10 (SP)
+   4C:  CLEAR     V0
+   50:  JR        RA
+   54:  ADDIU     SP, SP, 18
+}
+
+PADDING: 80240058 to 80240060 (00000058 to 00000060)
+00000000 00000000
+
+#new:Function $Function_80240060
+{
+    0:  ADDIU     SP, SP, FFE0
+    4:  SW        RA, 18 (SP)
+    8:  JAL       ~Func:get_enemy
+    C:  ADDIU     A0, R0, 6
+   10:  LH        A0, 8 (V0)
+   14:  JAL       ~Func:get_npc_unsafe
+   18:  NOP
+   1C:  LWC1      F0, 40 (V0)
+   20:  ADDIU     A0, R0, 32E
+   24:  SWC1      F0, 10 (SP)
+   28:  LW        A2, 38 (V0)
+   2C:  LW        A3, 3C (V0)
+   30:  JAL       801499EC
+   34:  CLEAR     A1
+   38:  LW        RA, 18 (SP)
+   3C:  ADDIU     V0, R0, 2
+   40:  JR        RA
+   44:  ADDIU     SP, SP, 20
+}
+
+PADDING: 802400A8 to 802400B0 (000000A8 to 000000B0)
+00000000 00000000
+
+#new:EntryList $EntryList
+{
+	~Vec4f:Entry0 % -733.0    0.0   -8.0   90.0
+	~Vec4f:Entry1 %  250.0   10.0 -100.0  225.0
+}
+
+#new:Header $Header
+{
+	[MainScript]  $Script_Main
+	[EntryList]   $EntryList
+	[EntryCount]  00000002
+	[Background]  80200000
+	[MapTattle]   001900C0
+}
+
+#new:Script $Script_80240110
+{
+    0:  Switch  *StoryProgress
+    C:  	Case  <  FFFFFFE3
+   18:  		Call  SetMusicTrack ( 00000000 .Song:GustyGulch 00000000 00000008 )
+   34:  	Case  <  FFFFFFF0
+   40:  		Call  SetMusicTrack ( 00000000 .Song:TubbaEscape 00000000 00000008 )
+   5C:  	Default
+   64:  		Call  SetMusicTrack ( 00000000 .Song:GustyGulch 00000000 00000008 )
+   80:  EndSwitch
+   88:  Call  ClearAmbientSounds    ( 000000FA )
+   98:  Return
+   A0:  End
+}
+
+PADDING: 802401B8 to 802401C0 (000001B8 to 000001C0)
+00000000 00000000
+
+#new:Script $Script_ExitWalk_802401C0
+{
+    0:  SetGroup  0000001B
+    C:  Call  UseExitHeading    ( 0000003C ~Entry:Entry0 )
+   20:  Exec  ExitWalk
+   2C:  Call  GotoMap   ( $ASCII_802437C4 00000001 ) % arn_04
+   40:  Wait  100`
+   4C:  Return
+   54:  End
+}
+
+#new:Script $Script_ExitDoubleDoor_8024021C
+{
+    0:  SetGroup  0000001B
+    C:  Call  DisablePlayerInput    ( .True )
+   1C:  Call  UseDoorSounds ( .DoorSounds:Creaky )
+   2C:  Set   *Var[0]  ~Entry:Entry1
+   3C:  Set   *Var[1]  00000012
+   4C:  Set   *Var[2]  00000005
+   5C:  Set   *Var[3]  00000007
+   6C:  Exec  ExitDoubleDoor
+   78:  Wait  17`
+   84:  Call  GotoMap   ( $ASCII_802437CC 00000000 ) % dgb_01
+   98:  Wait  100`
+   A4:  Return
+   AC:  End
+}
+
+#new:Script $Script_802402D0
+{
+    0:  Bind  $Script_ExitWalk_802401C0 .Trigger:FloorAbove 0000000F 00000001 00000000
+   1C:  Switch  *StoryProgress
+   28:  	Case  <  FFFFFFE4
+   34:  		Bind  $Script_ExitDoubleDoor_8024021C .Trigger:WallPressA 00000012 00000001 00000000
+   50:  	Case  <  FFFFFFE7
+   5C:  	Case  <  FFFFFFF0
+   68:  		Exec  $Script_80240F50
+   74:  		ExecWait  $Script_80241AA0
+   80:  	Default
+   88:  		Bind  $Script_ExitDoubleDoor_8024021C .Trigger:WallPressA 00000012 00000001 00000000
+   A4:  EndSwitch
+   AC:  Return
+   B4:  End
+}
+
+#new:Script $Script_EnterDoubleDoor_8024038C
+{
+    0:  Call  GetLoadType   ( *Var[1] )
+   10:  If  *Var[1]  ==  00000001
+   20:  	Exec  EnterSavePoint
+   2C:  	Exec  $Script_802402D0
+   38:  	Return
+   40:  EndIf
+   48:  Call  GetEntryID    ( *Var[0] )
+   58:  Switch  *Var[0]
+   64:  	Case  ==  ~Entry:Entry0
+   70:  		Set   *Var[0]  $Script_802402D0
+   80:  		Exec  EnterWalk
+   8C:  		Wait  1`
+   98:  	Case  ==  ~Entry:Entry1
+   A4:  		If  *StoryProgress  >=  FFFFFFE4
+   B4:  			If  *StoryProgress  <  FFFFFFE7
+   C4:  				Exec  $Script_802402D0
+   D0:  				Thread
+   D8:  					ExecWait  $Script_8024103C
+   E4:  					ExecWait  $Script_802413F4
+   F0:  				EndThread
+   F8:  				Return
+  100:  			EndIf
+  108:  		EndIf
+  110:  		Call  UseDoorSounds ( .DoorSounds:Creaky )
+  120:  		Set   *Var[2]  00000005
+  130:  		Set   *Var[3]  00000007
+  140:  		ExecWait  EnterDoubleDoor
+  14C:  		Exec  $Script_802402D0
+  158:  	Case  ==  00000002
+  164:  		Exec  $Script_802402D0
+  170:  		Exec  $Script_80242B84
+  17C:  EndSwitch
+  184:  Return
+  18C:  End
+}
+
+#new:Script_Main $Script_Main
+{
+    0:  Set   *WorldMapLocation  .Location:TubbasManor
+   10:  Set   *Flag_MAP_10  .True
+   20:  Call  SetSpriteShading  ( FFFFFFFF )
+   30:  Call  SetCamPerspective ( .Cam:Default 00000003 00000019 00000010 00001000 )
+   50:  Call  SetCamBGColor     ( .Cam:Default 00000000 00000000 00000000 )
+   6C:  Call  SetCamLeadPlayer  ( .Cam:Default .False )
+   80:  Call  SetCamEnabled     ( .Cam:Default .True )
+   94:  Call  GetEntryID        ( *Var[0] )
+   A4:  If  *Var[0]  ==  00000002
+   B4:  	Call  MakeNpcs  ( 00000000 $NpcGroupList_80243740 )
+   C8:  Else
+   D0:  	Call  MakeNpcs  ( 00000000 $NpcGroupList_802436EC )
+   E4:  EndIf
+   EC:  ExecWait  $Script_MakeEntities
+   F8:  Exec  $Script_80240110
+  104:  Exec  $Script_EnterDoubleDoor_8024038C
+  110:  Return
+  118:  End
+}
+
+#new:NpcSettings $NpcSettings_80240640
+{
+	00000000 00180018 00000000 00000000 00000000 00000000 00000000 00000000
+	00000000 00000000 00630000
+}
+
+#new:NpcSettings $NpcSettings_8024066C
+{
+	00000000 00180018 00000000 00000000 00000000 00000000 00000000 00000000
+	00000000 00000000 00630000
+}
+
+#new:Script $Script_80240698
+{
+    0:  Set   *Var[3]  00000000
+   10:  Sub   *Var[3]  *Var[2]
+   20:  Call  ModifyColliderFlags   ( 00000000 00000012 7FFFFE00 )
+   38:  Call  PlaySoundAtCollider   ( 00000012 .Sound:CreakyDoorOpen 00000000 )
+   50:  Call  MakeLerp  ( 00000000 00000050 0000001E .Easing:Linear )
+   6C:  Label  A
+   78:  Call  UpdateLerp ( )
+   84:  Call  RotateModel   ( 00000007 *Var[0] 00000000 *Var[2] 00000000 )
+   A4:  Call  RotateModel   ( 00000005 *Var[0] 00000000 *Var[3] 00000000 )
+   C4:  Wait  1`
+   D0:  If  *Var[1]  !=  00000000
+   E0:  	Goto  A
+   EC:  EndIf
+   F4:  Return
+   FC:  End
+}
+
+#new:Script $Script_8024079C
+{
+    0:  Set   *Var[3]  00000000
+   10:  Sub   *Var[3]  *Var[2]
+   20:  Call  MakeLerp      ( 00000050 00000000 0000000C .Easing:Linear )
+   3C:  Label  A
+   48:  Call  UpdateLerp ( )
+   54:  Call  RotateModel   ( 00000007 *Var[0] 00000000 *Var[2] 00000000 )
+   74:  Call  RotateModel   ( 00000005 *Var[0] 00000000 *Var[3] 00000000 )
+   94:  Wait  1`
+   A0:  If  *Var[1]  !=  00000000
+   B0:  	Goto  A
+   BC:  EndIf
+   C4:  Call  ModifyColliderFlags   ( 00000001 00000012 7FFFFE00 )
+   DC:  Call  PlaySoundAtCollider   ( 00000012 .Sound:CreakyDoorClose 00000000 )
+   F4:  Return
+   FC:  End
+}
+
+#new:Script $Script_802408A0
+{
+    0:  Call  GetNpcPos ( 00000000 *Var[0] *Var[1] *Var[2] )
+   1C:  Add   *Var[0]  000000C8
+   2C:  Call  NpcMoveTo ( 00000000 *Var[0] *Var[2] 0000002E )
+   48:  Return
+   50:  End
+}
+
+#new:Script $Script_802408F8
+{
+    0:  Call  GetNpcPos ( 00000001 *Var[0] *Var[1] *Var[2] )
+   1C:  Add   *Var[0]  000000C8
+   2C:  Call  NpcMoveTo ( 00000001 *Var[0] *Var[2] 00000032 )
+   48:  Return
+   50:  End
+}
+
+#new:Script $Script_80240950
+{
+    0:  Call  GetNpcPos ( 00000002 *Var[0] *Var[1] *Var[2] )
+   1C:  Add   *Var[0]  000000C8
+   2C:  Call  NpcMoveTo ( 00000002 *Var[0] *Var[2] 00000035 )
+   48:  Return
+   50:  End
+}
+
+#new:Script $Script_802409A8
+{
+    0:  Call  GetNpcPos ( 00000003 *Var[0] *Var[1] *Var[2] )
+   1C:  Add   *Var[0]  000000C8
+   2C:  Call  NpcMoveTo ( 00000003 *Var[0] *Var[2] 0000002E )
+   48:  Return
+   50:  End
+}
+
+#new:Script $Script_80240A00
+{
+    0:  Call  GetNpcPos ( 00000004 *Var[0] *Var[1] *Var[2] )
+   1C:  Add   *Var[0]  000000C8
+   2C:  Call  NpcMoveTo ( 00000004 *Var[0] *Var[2] 00000032 )
+   48:  Return
+   50:  End
+}
+
+#new:Script $Script_80240A58
+{
+    0:  Call  GetNpcPos ( 00000005 *Var[0] *Var[1] *Var[2] )
+   1C:  Add   *Var[0]  000000C8
+   2C:  Call  NpcMoveTo ( 00000005 *Var[0] *Var[2] 00000035 )
+   48:  Return
+   50:  End
+}
+
+#new:Script $Script_80240AB0
+{
+    0:  Exec  $Script_802408A0
+    C:  Exec  $Script_802408F8
+   18:  Exec  $Script_80240950
+   24:  Exec  $Script_802409A8
+   30:  Exec  $Script_80240A00
+   3C:  Exec  $Script_80240A58
+   48:  Return
+   50:  End
+}
+
+#new:Script $Script_80240B08
+{
+    0:  Call  SetNpcJumpscale   ( 00000000 *Fixed[-0.2] )
+   14:  Call  NpcJump0  ( 00000000 00000101 0000001E FFFFFFA6 00000005 )
+   34:  Call  EnableNpcShadow   ( 00000000 .False )
+   48:  Call  SetNpcAnimation   ( 00000000 00950106 )
+   5C:  Return
+   64:  End
+}
+
+#new:Script $Script_80240B74
+{
+    0:  Call  SetNpcJumpscale   ( 00000001 *Fixed[-0.3] )
+   14:  Call  NpcJump0  ( 00000001 00000110 00000070 FFFFFFAF 0000000C )
+   34:  Call  EnableNpcShadow   ( 00000001 .False )
+   48:  Call  SetNpcAnimation   ( 00000001 00950106 )
+   5C:  Return
+   64:  End
+}
+
+#new:Script $Script_80240BE0
+{
+    0:  Call  SetNpcJumpscale   ( 00000002 *Fixed[-0.4] )
+   14:  Call  NpcJump0  ( 00000002 000000ED 00000078 FFFFFF8A 0000000A )
+   34:  Call  EnableNpcShadow   ( 00000002 .False )
+   48:  Call  SetNpcAnimation   ( 00000002 00950106 )
+   5C:  Return
+   64:  End
+}
+
+#new:Script $Script_80240C4C
+{
+    0:  Call  SetNpcJumpscale   ( 00000003 *Fixed[-0.3] )
+   14:  Call  NpcJump0  ( 00000003 00000118 0000003C FFFFFFB1 00000008 )
+   34:  Call  EnableNpcShadow   ( 00000003 .False )
+   48:  Call  SetNpcAnimation   ( 00000003 00950106 )
+   5C:  Return
+   64:  End
+}
+
+#new:Script $Script_80240CB8
+{
+    0:  Call  SetNpcJumpscale   ( 00000004 *Fixed[-0.4] )
+   14:  Call  NpcJump0  ( 00000004 000000FA 00000051 FFFFFF9F 00000009 )
+   34:  Call  EnableNpcShadow   ( 00000004 .False )
+   48:  Call  SetNpcAnimation   ( 00000004 00950106 )
+   5C:  Return
+   64:  End
+}
+
+#new:Script $Script_80240D24
+{
+    0:  Call  SetNpcJumpscale   ( 00000005 *Fixed[-0.5] )
+   14:  Call  NpcJump0  ( 00000005 000000E3 0000002B FFFFFF85 0000000F )
+   34:  Call  EnableNpcShadow   ( 00000005 .False )
+   48:  Call  SetNpcAnimation   ( 00000005 00950106 )
+   5C:  Return
+   64:  End
+}
+
+#new:Script $Script_80240D90
+{
+    0:  Exec  $Script_80240B74
+    C:  Exec  $Script_80240BE0
+   18:  Exec  $Script_80240C4C
+   24:  Exec  $Script_80240CB8
+   30:  Exec  $Script_80240D24
+   3C:  Return
+   44:  End
+}
+
+#new:Script $Script_80240DDC
+{
+    0:  Call  GetNpcPos ( 00000000 *Var[0] *Var[1] *Var[2] )
+   1C:  Loop
+   28:  	Call  RandInt   ( 00000005 *Var[A] )
+   3C:  	Add   *Var[A]  00000002
+   4C:  	Set   *Var[B]  00000000
+   5C:  	Label  A
+   68:  	Set   *Var[3]  *Var[0]
+   78:  	Add   *Var[3]  00000001
+   88:  	Call  SetNpcPos ( 00000000 *Var[3] *Var[1] *Var[2] )
+   A4:  	Wait  1`
+   B0:  	Set   *Var[3]  *Var[0]
+   C0:  	Add   *Var[3]  FFFFFFFF
+   D0:  	Call  SetNpcPos ( 00000000 *Var[3] *Var[1] *Var[2] )
+   EC:  	Wait  1`
+   F8:  	Add   *Var[B]  00000001
+  108:  	If  *Var[B]  <  *Var[A]
+  118:  		Goto  A
+  124:  	EndIf
+  12C:  	Call  RandInt   ( 0000000A *Var[A] )
+  140:  	Add   *Var[A]  0000000A
+  150:  	Wait  *Var[A]
+  15C:  EndLoop
+  164:  Return
+  16C:  End
+}
+
+#new:Script $Script_80240F50
+{
+    0:  SetGroup  000000EF
+    C:  Loop
+   18:  	Call  RandInt   ( 00000032 *Var[0] )
+   2C:  	Add   *Var[0]  00000050
+   3C:  	Wait  *Var[0]
+   48:  	If  *MapVar[0]  ==  00000000
+   58:  		Call  DisablePlayerInput    ( .True )
+   68:  		Call  PlaySoundAt   ( 000000B4 00000000 000000F0 0000000A FFFFFF83 )
+   88:  		Call  ShakeCam  ( .Cam:Default 00000000 00000014 *Fixed[2.0] )
+   A4:  		Call  ShowMessageAtScreenPos    ( 000E00EF 000000A0 00000028 ) % I smell delicious ghosts! Open the doooooooor!!
+   BC:  		Call  DisablePlayerInput    ( .False )
+   CC:  	EndIf
+   D4:  EndLoop
+   DC:  Return
+   E4:  End
+}
+
+#new:Script $Script_8024103C
+{
+    0:  Call  DisablePlayerInput        ( .True )
+   10:  Call  DisablePartnerAI  ( 00000000 )
+   20:  Call  SetPlayerPos  ( 0000015E 0000000A FFFFFF6A )
+   38:  Call  InterpPlayerYaw   ( 0000010E 00000001 )
+   4C:  Call  SetNpcPos     ( .Npc:Partner 0000015E 0000000A FFFFFF6A )
+   68:  Call  EnablePartnerAI ( )
+   74:  Call  SetCamType    ( .Cam:Default 00000004 .False )
+   8C:  Call  SetCamSpeed   ( .Cam:Default *Fixed[90.0] )
+   A0:  Call  GetPlayerPos  ( *Var[0] *Var[1] *Var[2] )
+   B8:  Set   *Var[0]  000000AF
+   C8:  Set   *Var[1]  00000000
+   D8:  Set   *Var[2]  FFFFFFB5
+   E8:  Call  UseSettingsFrom   ( .Cam:Default *Var[0] *Var[1] *Var[2] )
+  104:  Call  SetPanTarget  ( .Cam:Default *Var[0] *Var[1] *Var[2] )
+  120:  Call  PanToTarget   ( .Cam:Default 00000000 00000001 )
+  138:  Call  WaitForCam    ( .Cam:Default *Fixed[1.0] )
+  14C:  Wait  40`
+  158:  Call  SetNpcPos     ( 00000000 FFFFFFC4 0000000A FFFFFFBA )
+  174:  Call  SetNpcPos     ( 00000001 FFFFFF9C 0000000A FFFFFF92 )
+  190:  Call  SetNpcPos     ( 00000002 FFFFFF74 0000000A FFFFFF6A )
+  1AC:  Call  SetNpcPos     ( 00000003 FFFFFF9C 0000000A FFFFFFE2 )
+  1C8:  Call  SetNpcPos     ( 00000004 FFFFFF74 0000000A FFFFFFBA )
+  1E4:  Call  SetNpcPos     ( 00000005 FFFFFF4C 0000000A FFFFFF9C )
+  200:  ExecWait  $Script_80240AB0
+  20C:  Wait  60`
+  218:  Call  InterpNpcYaw  ( 00000000 0000010E 00000001 )
+  230:  Call  SpeakToPlayer ( 00000000 00950104 00950101 00000005 000E00DB ) % At last, we've arrived at Tubba Blubba's Castle! A ...
+  250:  Call  SpeakToPlayer ( 00000004 00950104 00950101 00000005 000E00DC ) % But...what can we do?
+  270:  Call  SpeakToPlayer ( 00000000 00950104 00950101 00000005 000E00DD ) % This is no time to lose our nerve, fellow Boos! Ou ...
+  290:  Call  PlaySoundAt   ( 000000B4 00000000 000000F0 0000000A FFFFFF83 )
+  2B0:  Call  ShakeCam      ( .Cam:Default 00000000 00000014 *Fixed[2.0] )
+  2CC:  Wait  10`
+  2D8:  Call  PlaySoundAt   ( 000000B4 00000000 000000F0 0000000A FFFFFF83 )
+  2F8:  Call  ShakeCam      ( .Cam:Default 00000000 00000014 *Fixed[2.0] )
+  314:  Call  InterpNpcYaw  ( 00000000 0000005A 00000001 )
+  32C:  Call  ShowMessageAtScreenPos    ( 000E00DE 000000A0 00000028 ) % Come back here!!
+  344:  Call  SetPlayerPos  ( 0000015E 0000000A FFFFFF6A )
+  35C:  Call  InterpPlayerYaw   ( 0000010E 00000001 )
+  370:  Call  SetNpcPos     ( .Npc:Partner 0000015E 0000000A FFFFFF6A )
+  38C:  Set   *Var[2]  00000001
+  39C:  ExecWait  $Script_80240698
+  3A8:  Return
+  3B0:  End
+}
+
+#new:Script $Script_802413F4
+{
+    0:  Call  SetPlayerSpeed    ( *Fixed[8.0] )
+   10:  Call  PlayerMoveTo  ( 000000B8 FFFFFFD4 00000000 )
+   28:  Call  PlaySoundAtNpc    ( 00000000 00000262 00000000 )
+   40:  Call  PlaySoundAtNpc    ( 00000001 00000262 00000000 )
+   58:  Call  PlaySoundAtNpc    ( 00000002 00000262 00000000 )
+   70:  Call  PlaySoundAtNpc    ( 00000003 00000262 00000000 )
+   88:  Call  PlaySoundAtNpc    ( 00000004 00000262 00000000 )
+   A0:  Call  PlaySoundAtNpc    ( 00000005 00000262 00000000 )
+   B8:  Call  ShowEmote     ( 00000000 .Emote:Exclamation 0000002D 00000014 00000001 00000000 00000000 00000000 00000000 )
+   E8:  Call  ShowEmote     ( 00000001 .Emote:Exclamation 0000002D 00000014 00000001 00000000 00000000 00000000 00000000 )
+  118:  Call  ShowEmote     ( 00000002 .Emote:Exclamation 0000002D 00000014 00000001 00000000 00000000 00000000 00000000 )
+  148:  Call  ShowEmote     ( 00000003 .Emote:Exclamation 0000002D 00000014 00000001 00000000 00000000 00000000 00000000 )
+  178:  Call  ShowEmote     ( 00000004 .Emote:Exclamation 0000002D 00000014 00000001 00000000 00000000 00000000 00000000 )
+  1A8:  Call  ShowEmote     ( 00000005 .Emote:Exclamation 0000002D 00000014 00000001 00000000 00000000 00000000 00000000 )
+  1D8:  Wait  50`
+  1E4:  Set   *Var[2]  00000001
+  1F4:  Exec  $Script_8024079C
+  200:  Exec  $Script_80240D90
+  20C:  Wait  20`
+  218:  Call  SetCamType    ( .Cam:Default 00000006 .True )
+  230:  Call  SetCamSpeed   ( .Cam:Default *Fixed[6.0] )
+  244:  Call  SetCamPitch   ( .Cam:Default *Fixed[15.0] *Fixed[-15.0] )
+  25C:  Call  GetPlayerPos  ( *Var[0] *Var[1] *Var[2] )
+  274:  Call  UseSettingsFrom   ( .Cam:Default *Var[0] *Var[1] *Var[2] )
+  290:  Call  SetPanTarget  ( .Cam:Default *Var[0] *Var[1] *Var[2] )
+  2AC:  Call  SetCamDistance    ( .Cam:Default 0000012C )
+  2C0:  Call  PanToTarget   ( .Cam:Default 00000000 00000001 )
+  2D8:  Call  WaitForCam    ( .Cam:Default *Fixed[1.0] )
+  2EC:  Exec  $Script_80240DDC *Var[A]
+  2FC:  Call  SpeakToPlayer ( 00000000 00950104 00950101 00000000 000E00DF ) % Wha... Wha... What's that noise? Tubba Blubba's ch ...
+  31C:  Kill  *Var[A]
+  328:  Call  SetPlayerAnimation    ( 00080007 )
+  338:  Wait  20`
+  344:  Call  SpeakToPlayer ( 00000000 00950104 00950101 00000000 000E00E0 ) % What!? You might be able to find out Tubba Blubba' ...
+  364:  Wait  20`
+  370:  Call  SetPlayerAnimation    ( .PlayerAnim:NodYes )
+  380:  Wait  20`
+  38C:  Call  SpeakToPlayer ( 00000000 00950104 00950101 00000000 000E00E1 ) % You must hurry! Run as fast as you can to the Wind ...
+  3AC:  Call  DisablePartnerAI  ( 00000000 )
+  3BC:  Call  GetCurrentPartnerID   ( *Var[0] )
+  3CC:  Switch  *Var[0]
+  3D8:  	Case  ==  .Partner:Goombario % 1
+  3E4:  		Call  SpeakToPlayer ( .Npc:Partner 00010008 00010001 00000000 000E00E2 ) % No!  You'll all be eaten when he comes through tha ...
+  404:  	Case  ==  .Partner:Kooper % 2
+  410:  		Call  SpeakToPlayer ( .Npc:Partner 0002000D 00020003 00000000 000E00E3 ) % Are you nuts! That Tubba Blubba will make a meal o ...
+  430:  	Case  ==  .Partner:Bombette % 3
+  43C:  		Call  SpeakToPlayer ( .Npc:Partner 0003000E 00030003 00000000 000E00E4 ) % No, no! That's crazy! If he gets through, he'll ea ...
+  45C:  	Case  ==  .Partner:Parakarry % 4
+  468:  		Call  SpeakToPlayer ( .Npc:Partner 00040006 00040001 00000000 000E00E5 ) % I can't agree to that! You're all in grave peril o ...
+  488:  	Case  ==  .Partner:Bow % 9
+  494:  		Call  SpeakToPlayer ( .Npc:Partner 00050004 00050001 00000000 000E00E6 ) % It's too dangerous! He's a madman! He'll eat every ...
+  4B4:  EndSwitch
+  4BC:  Call  EnablePartnerAI ( )
+  4C8:  Call  SetCamType    ( .Cam:Default 00000004 .False )
+  4E0:  Call  SetCamSpeed   ( .Cam:Default *Fixed[6.0] )
+  4F4:  Call  GetPlayerPos  ( *Var[0] *Var[1] *Var[2] )
+  50C:  Call  UseSettingsFrom       ( .Cam:Default *Var[0] *Var[1] *Var[2] )
+  528:  Call  SetPanTarget  ( .Cam:Default *Var[0] *Var[1] *Var[2] )
+  544:  Call  PanToTarget   ( .Cam:Default 00000000 00000001 )
+  55C:  Call  WaitForCam    ( .Cam:Default *Fixed[1.0] )
+  570:  Call  PanToTarget   ( .Cam:Default 00000000 00000000 )
+  588:  Call  PlaySoundAt   ( 000000B4 00000000 000000F0 0000000A FFFFFF83 )
+  5A8:  Call  ShakeCam      ( .Cam:Default 00000000 00000014 *Fixed[2.0] )
+  5C4:  Wait  5`
+  5D0:  Call  PlaySoundAt   ( 000000B4 00000000 000000F0 0000000A FFFFFF83 )
+  5F0:  Call  ShakeCam      ( .Cam:Default 00000000 00000014 *Fixed[2.0] )
+  60C:  Call  ShowMessageAtScreenPos    ( 000E00E7 000000A0 00000028 ) % Grruuuurg!! Why won't this door open?!
+  624:  ExecWait  $Script_80240B08
+  630:  Wait  10`
+  63C:  Call  SpeakToPlayer ( 00000000 00950106 00950106 00000005 000E00E8 ) % I...don't know how long...we can... keep holding t ...
+  65C:  Call  SetNpcAnimation       ( 00000000 00950106 )
+  670:  Exec  $Script_80240F50
+  67C:  Set   *StoryProgress  FFFFFFE7
+  68C:  Call  DisablePlayerInput    ( .False )
+  69C:  Return
+  6A4:  End
+}
+
+#new:Script $Script_80241AA0
+{
+    0:  Call  SetNpcPos ( 00000000 000000F6 0000001E FFFFFF92 )
+   1C:  Call  SetNpcPos ( 00000001 00000114 00000078 FFFFFFB0 )
+   38:  Call  SetNpcPos ( 00000002 000000D8 00000078 FFFFFF74 )
+   54:  Call  SetNpcPos ( 00000003 00000114 0000003C FFFFFFB0 )
+   70:  Call  SetNpcPos ( 00000004 000000F6 0000005A FFFFFF92 )
+   8C:  Call  SetNpcPos ( 00000005 000000D8 0000003C FFFFFF7E )
+   A8:  Call  InterpNpcYaw      ( 00000000 00000046 00000001 )
+   C0:  Call  InterpNpcYaw      ( 00000001 00000063 00000001 )
+   D8:  Call  InterpNpcYaw      ( 00000002 0000005D 00000001 )
+   F0:  Call  InterpNpcYaw      ( 00000003 0000004A 00000001 )
+  108:  Call  InterpNpcYaw      ( 00000004 0000004E 00000001 )
+  120:  Call  InterpNpcYaw      ( 00000005 00000051 00000001 )
+  138:  Call  SetNpcAnimation   ( 00000000 00950106 )
+  14C:  Call  SetNpcAnimation   ( 00000001 00950106 )
+  160:  Call  SetNpcAnimation   ( 00000002 00950106 )
+  174:  Call  SetNpcAnimation   ( 00000003 00950106 )
+  188:  Call  SetNpcAnimation   ( 00000004 00950106 )
+  19C:  Call  SetNpcAnimation   ( 00000005 00950106 )
+  1B0:  Call  EnableNpcShadow   ( 00000000 .False )
+  1C4:  Call  EnableNpcShadow   ( 00000001 .False )
+  1D8:  Call  EnableNpcShadow   ( 00000002 .False )
+  1EC:  Call  EnableNpcShadow   ( 00000003 .False )
+  200:  Call  EnableNpcShadow   ( 00000004 .False )
+  214:  Call  EnableNpcShadow   ( 00000005 .False )
+  228:  Return
+  230:  End
+}
+
+#new:Script $Script_Interact_80241CD8
+{
+    0:  Set   *MapVar[0]  00000001
+   10:  Call  SpeakToPlayer     ( 00000000 00950106 00950106 00000005 000E00E9 ) % We can't hold it much longer! Hurry to the Windy M ...
+   30:  Call  SetNpcAnimation   ( 00000000 00950106 )
+   44:  Call  DisablePartnerAI  ( 00000000 )
+   54:  Call  GetCurrentPartnerID   ( *Var[0] )
+   64:  Switch  *Var[0]
+   70:  	Case  ==  .Partner:Goombario % 1
+   7C:  		Call  AdjustCam     ( .Cam:Default *Fixed[6.0] 00000000 *Fixed[-275.0] *Fixed[15.0] *Fixed[-6.0] )
+   A0:  		Call  SpeakToPlayer ( .Npc:Partner 00010008 00010001 00000000 000E00EA ) % Mario! C'mon! We have to go to the Windy Mill!
+   C0:  		Call  ResetCam      ( .Cam:Default *Fixed[6.0] )
+   D4:  	Case  ==  .Partner:Kooper % 2
+   E0:  		Call  AdjustCam     ( .Cam:Default *Fixed[6.0] 00000000 *Fixed[-275.0] *Fixed[15.0] *Fixed[-6.0] )
+  104:  		Call  SpeakToPlayer ( .Npc:Partner 0002000D 00020003 00000000 000E00EB ) % Mario, we have to! Let's go as fast as we can!
+  124:  		Call  ResetCam      ( .Cam:Default *Fixed[6.0] )
+  138:  	Case  ==  .Partner:Bombette % 3
+  144:  		Call  AdjustCam     ( .Cam:Default *Fixed[6.0] 00000000 *Fixed[-275.0] *Fixed[15.0] *Fixed[-6.0] )
+  168:  		Call  SpeakToPlayer ( .Npc:Partner 0003000E 00030003 00000000 000E00EC ) % We have no choice, Mario! Our only hope is to find ...
+  188:  		Call  ResetCam      ( .Cam:Default *Fixed[6.0] )
+  19C:  	Case  ==  .Partner:Parakarry % 4
+  1A8:  		Call  AdjustCam     ( .Cam:Default *Fixed[6.0] 00000000 *Fixed[-275.0] *Fixed[15.0] *Fixed[-6.0] )
+  1CC:  		Call  SpeakToPlayer ( .Npc:Partner 00040006 00040001 00000000 000E00ED ) % Make haste to the Windy Mill! We can't let their b ...
+  1EC:  		Call  ResetCam      ( .Cam:Default *Fixed[6.0] )
+  200:  	Case  ==  .Partner:Bow % 9
+  20C:  		Call  AdjustCam     ( .Cam:Default *Fixed[6.0] 00000000 *Fixed[-275.0] *Fixed[15.0] *Fixed[-6.0] )
+  230:  		Call  SpeakToPlayer ( .Npc:Partner 00050004 00050001 00000000 000E00EE ) % Oh... Let's go, Mario! We're going to the Windy Mi ...
+  250:  		Call  ResetCam      ( .Cam:Default *Fixed[6.0] )
+  264:  EndSwitch
+  26C:  Call  EnablePartnerAI ( )
+  278:  Set   *MapVar[0]  00000000
+  288:  Return
+  290:  End
+}
+
+#new:Script $Script_Init_80241F70
+{
+    0:  Call  BindNpcInteract   ( .Npc:Self $Script_Interact_80241CD8 )
+   14:  Return
+   1C:  End
+}
+
+#new:Script $Script_Init_80241F94
+{
+    0:  Return
+    8:  End
+}
+
+#new:Script $Script_Init_80241FA4
+{
+    0:  Return
+    8:  End
+}
+
+#new:Script $Script_Init_80241FB4
+{
+    0:  Return
+    8:  End
+}
+
+#new:Script $Script_Init_80241FC4
+{
+    0:  Return
+    8:  End
+}
+
+#new:Script $Script_Init_80241FD4
+{
+    0:  Return
+    8:  End
+}
+
+#new:NpcGroup $NpcGroup_80241FE4
+{
+	00000000 $NpcSettings_80240640 ~Vec3f:NPC_80241FE4 % 0 -1000 0
+	00400705 $Script_Init_80241F70 00000000 00000000 0000005A
+	~NoDrops
+	~Movement:NPC_80241FE4
+	~AnimationTable:NPC_80241FE4 % .Sprite:Boo
+	00000000 00000000 00000000 001A00B5 % That's a brave Boo. Even though he knows he may be ...
+}
+
+#new:NpcGroup $NpcGroup_802421D4
+{
+	00000001 $NpcSettings_80240640 ~Vec3f:NPC_802421D4 % 0 -1000 0
+	00000705 $Script_Init_80241F94 00000000 00000000 0000005A
+	~NoDrops
+	~Movement:NPC_802421D4
+	~AnimationTable:NPC_802421D4 % .Sprite:Boo
+	00000000 00000000 00000000 00000000 % no tattle string
+}
+
+#new:NpcGroup $NpcGroup_802423C4
+{
+	00000002 $NpcSettings_80240640 ~Vec3f:NPC_802423C4 % 0 -1000 0
+	00000705 $Script_Init_80241FA4 00000000 00000000 0000005A
+	~NoDrops
+	~Movement:NPC_802423C4
+	~AnimationTable:NPC_802423C4 % .Sprite:Boo
+	00000000 00000000 00000000 00000000 % no tattle string
+}
+
+#new:NpcGroup $NpcGroup_802425B4
+{
+	00000003 $NpcSettings_80240640 ~Vec3f:NPC_802425B4 % 0 -1000 0
+	00000705 $Script_Init_80241FB4 00000000 00000000 0000005A
+	~NoDrops
+	~Movement:NPC_802425B4
+	~AnimationTable:NPC_802425B4 % .Sprite:Boo
+	00000000 00000000 00000000 00000000 % no tattle string
+}
+
+#new:NpcGroup $NpcGroup_802427A4
+{
+	00000004 $NpcSettings_80240640 ~Vec3f:NPC_802427A4 % 0 -1000 0
+	00000705 $Script_Init_80241FC4 00000000 00000000 0000005A
+	~NoDrops
+	~Movement:NPC_802427A4
+	~AnimationTable:NPC_802427A4 % .Sprite:Boo
+	00000000 00000000 00000000 00000000 % no tattle string
+}
+
+#new:NpcGroup $NpcGroup_80242994
+{
+	00000005 $NpcSettings_80240640 ~Vec3f:NPC_80242994 % 0 -1000 0
+	00000705 $Script_Init_80241FD4 00000000 00000000 0000005A
+	~NoDrops
+	~Movement:NPC_80242994
+	~AnimationTable:NPC_80242994 % .Sprite:Boo
+	00000000 00000000 00000000 00000000 % no tattle string
+}
+
+#new:Script $Script_80242B84
+{
+    0:  Call  DisablePlayerInput    ( .True )
+   10:  Call  DisablePlayerPhysics  ( .True )
+   20:  Call  DisablePartnerAI      ( 00000000 )
+   30:  Call  SetNpcPos ( .Npc:Partner 00000140 0000000A FFFFFF60 )
+   4C:  Call  PlaySound ( 0000032E )
+   5C:  Thread
+   64:  	Loop  000000B4
+   70:  		Call  GetNpcPos ( 00000006 *Var[0] *Var[1] *Var[2] )
+   8C:  		Call  $Function_80240060 ( )
+   98:  		Wait  1`
+   A4:  	EndLoop
+   AC:  EndThread
+   B4:  Call  SetPlayerPos      ( 00000140 00000032 FFFFFF60 )
+   CC:  Call  InterpPlayerYaw   ( 0000010E 00000000 )
+   E0:  Call  SetPlayerAnimation    ( 00080017 )
+   F0:  Call  SetNpcPos ( 00000006 00000140 00000046 FFFFFF62 )
+  10C:  Call  InterpNpcYaw      ( 00000006 0000010E 00000000 )
+  124:  Call  SetNpcAnimation   ( 00000006 00380008 )
+  138:  Call  UseSettingsFrom   ( .Cam:Default 000000AF 00000000 FFFFFFDD )
+  154:  Call  SetPanTarget      ( .Cam:Default 000000AF 00000000 FFFFFFDD )
+  170:  Call  SetCamDistance    ( .Cam:Default *Fixed[540.0] )
+  184:  Call  SetCamSpeed       ( .Cam:Default *Fixed[90.0] )
+  198:  Call  PanToTarget       ( .Cam:Default 00000000 00000001 )
+  1B0:  Wait  20`
+  1BC:  Thread
+  1C4:  	Set   *Var[2]  00000001
+  1D4:  	Exec  $Script_80240698
+  1E0:  EndThread
+  1E8:  Wait  15`
+  1F4:  Thread
+  1FC:  	Call  SetPlayerJumpscale    ( 00000000 )
+  20C:  	Call  PlayerJump1   ( 000000AF 00000032 FFFFFFDD 00000028 )
+  228:  EndThread
+  230:  Thread
+  238:  	Call  DisablePartnerAI  ( 00000000 )
+  248:  	Wait  1`
+  254:  	Call  InterpNpcYaw      ( .Npc:Partner 0000010E 00000000 )
+  26C:  	Call  SetNpcAnimation   ( .Npc:Partner 00000107 )
+  280:  	Wait  85`
+  28C:  	Call  802CF56C  ( 00000002 )
+  29C:  	Wait  1`
+  2A8:  	Call  EnablePartnerAI ( )
+  2B4:  EndThread
+  2BC:  Call  NpcMoveTo ( 00000006 000000AF FFFFFFDF 00000028 )
+  2D8:  Wait  20`
+  2E4:  Call  SetNpcPos ( 00000006 000000AF 00000055 FFFFFFDF )
+  300:  Call  SetNpcAnimation   ( 00000006 00380009 )
+  314:  Wait  20`
+  320:  Call  PlaySoundAtNpc    ( 00000006 000002F7 00000000 )
+  338:  Call  SetNpcAnimation   ( 00000006 00380002 )
+  34C:  Call  SetNpcPos ( 00000006 000000AF 00000046 FFFFFFDF )
+  368:  Thread
+  370:  	Wait  40`
+  37C:  	Call  SetNpcAnimation   ( 00000006 00380003 )
+  390:  	Call  NpcMoveTo ( 00000006 0000010E FFFFFF88 0000001E )
+  3AC:  	Call  StopSound ( 0000032E )
+  3BC:  	Call  SetNpcPos ( 00000006 00000000 FFFFFC18 00000000 )
+  3D8:  EndThread
+  3E0:  Thread
+  3E8:  	Wait  60`
+  3F4:  	Set   *Var[2]  00000001
+  404:  	Exec  $Script_8024079C
+  410:  EndThread
+  418:  Call  SetPlayerJumpscale    ( 00000000 )
+  428:  Call  PlayerJump1   ( 000000AF 00000000 FFFFFFDD 0000000A )
+  444:  Call  PlaySoundAtNpc        ( 00000006 00000162 00000000 )
+  45C:  Call  SetPlayerAnimation    ( 00080003 )
+  46C:  Thread
+  474:  	Wait  2`
+  480:  	Call  PlayEffect    ( ~FX:EmoteIcon:Frustration 00000000 000000AF 00000000 FFFFFFDD 00000014 FFFFFFEC 0000001E 00000000 00000000 00000000 00000000 00000000 )
+  4C4:  EndThread
+  4CC:  Thread
+  4D4:  	Call  SetCamDistance    ( .Cam:Default *Fixed[320.0] )
+  4E8:  	Call  SetCamPitch   ( .Cam:Default *Fixed[15.0] *Fixed[-7.5] )
+  500:  	Call  SetCamSpeed   ( .Cam:Default *Fixed[2.0] )
+  514:  	Call  PanToTarget   ( .Cam:Default 00000000 00000001 )
+  52C:  EndThread
+  534:  Wait  65`
+  540:  Call  GetCurrentPartnerID   ( *Var[0] )
+  550:  Switch  *Var[0]
+  55C:  	Case  ==  .Partner:Goombario % 1
+  568:  		Call  SetNpcFlagBits    ( .Npc:Partner 00000200 .True )
+  580:  	Case  ==  .Partner:Kooper % 2
+  58C:  		Call  SetNpcFlagBits    ( .Npc:Partner 00000200 .True )
+  5A4:  	Case  ==  .Partner:Bombette % 3
+  5B0:  		Call  SetNpcFlagBits    ( .Npc:Partner 00000200 .True )
+  5C8:  EndSwitch
+  5D0:  Call  DisablePartnerAI      ( 00000000 )
+  5E0:  Call  GetCurrentPartnerID   ( *Var[0] )
+  5F0:  Switch  *Var[0]
+  5FC:  	Case  ==  .Partner:Goombario % 1
+  608:  		Call  SpeakToPlayer ( .Npc:Partner 00000108 00000106 00000005 000E00D6 ) % Mario...If they catch you, they'll carry you out o ...
+  628:  	Case  ==  .Partner:Kooper % 2
+  634:  		Call  SpeakToPlayer ( .Npc:Partner 00000108 00000106 00000005 000E00D7 ) % Can't we do something so these things don't chuck  ...
+  654:  	Case  ==  .Partner:Bombette % 3
+  660:  		Call  SpeakToPlayer ( .Npc:Partner 00000108 00000106 00000005 000E00D8 ) % Mario, they'll throw us out of the castle if they  ...
+  680:  	Case  ==  .Partner:Parakarry % 4
+  68C:  		Call  SpeakToPlayer ( .Npc:Partner 00000108 00000106 00000005 000E00D9 ) % This is not good. We'll be thrown out of the castl ...
+  6AC:  	Case  ==  .Partner:Bow % 9
+  6B8:  		Call  SpeakToPlayer ( .Npc:Partner 00000108 00000106 00000005 000E00DA ) % These things will try to catch us and throw us out ...
+  6D8:  	Default
+  6E0:  		Call  SpeakToPlayer ( .Npc:Partner 00000108 00000106 00000005 000E00D6 ) % Mario...If they catch you, they'll carry you out o ...
+  700:  EndSwitch
+  708:  Call  EnablePartnerAI ( )
+  714:  Wait  5`
+  720:  Call  SetPlayerAnimation    ( .PlayerAnim:GetUp )
+  730:  Wait  20`
+  73C:  Call  SetPlayerAnimation    ( .PlayerAnim:DustOff )
+  74C:  Wait  7`
+  758:  Call  PlaySoundAtPlayer ( 00000172 00000000 )
+  76C:  Wait  8`
+  778:  Call  PlaySoundAtPlayer ( 00000172 00000000 )
+  78C:  Wait  15`
+  798:  Call  SetPlayerAnimation    ( 0008001B )
+  7A8:  Wait  25`
+  7B4:  Call  InterpPlayerYaw   ( 0000005A 00000000 )
+  7C8:  Wait  1`
+  7D4:  Call  SetPlayerAnimation    ( 00010002 )
+  7E4:  Call  InterpPlayerYaw   ( 0000002D 00000000 )
+  7F8:  Wait  10`
+  804:  Call  SetPlayerAnimation    ( .PlayerAnim:MidairStill )
+  814:  Call  SetPlayerJumpscale    ( 00000001 )
+  824:  Call  GetPlayerPos      ( *Var[0] *Var[1] *Var[2] )
+  83C:  Call  PlayerJump1       ( *Var[0] 00000000 *Var[2] 0000000A )
+  858:  Call  PlayerJump1       ( *Var[0] 00000000 *Var[2] 0000000A )
+  874:  Call  SetPlayerAnimation    ( 00010002 )
+  884:  Call  GetPlayerPos      ( *Var[0] *Var[1] *Var[2] )
+  89C:  Call  UseSettingsFrom   ( .Cam:Default *Var[0] *Var[1] *Var[2] )
+  8B8:  Call  SetPanTarget      ( .Cam:Default *Var[0] *Var[1] *Var[2] )
+  8D4:  Call  SetCamSpeed       ( .Cam:Default *Fixed[4.0] )
+  8E8:  Call  PanToTarget       ( .Cam:Default 00000000 00000001 )
+  900:  Call  WaitForCam        ( .Cam:Default *Fixed[1.0] )
+  914:  Call  PanToTarget       ( .Cam:Default 00000000 00000000 )
+  92C:  Call  EnablePartnerAI ( )
+  938:  Call  DisablePlayerPhysics  ( .False )
+  948:  Call  DisablePlayerInput    ( .False )
+  958:  Return
+  960:  End
+}
+
+#new:Script $Script_Init_802434EC
+{
+    0:  Return
+    8:  End
+}
+
+#new:NpcGroup $NpcGroup_802434FC
+{
+	00000006 $NpcSettings_8024066C ~Vec3f:NPC_802434FC % 0 0 -1000
+	00400F05 $Script_Init_802434EC 00000000 00000000 0000005A
+	~NoDrops
+	~Movement:NPC_802434FC
+	~AnimationTable:NPC_802434FC % .Sprite:Sentinel
+	00000000 00000000 00000000 00000000 % no tattle string
+}
+
+#new:NpcGroupList $NpcGroupList_802436EC
+{
+	00000001 $NpcGroup_80241FE4 00000000
+	00000001 $NpcGroup_802421D4 00000000
+	00000001 $NpcGroup_802423C4 00000000
+	00000001 $NpcGroup_802425B4 00000000
+	00000001 $NpcGroup_802427A4 00000000
+	00000001 $NpcGroup_80242994 00000000
+	00000000 00000000 00000000
+}
+
+#new:NpcGroupList $NpcGroupList_80243740
+{
+	00000001 $NpcGroup_802434FC 00000000
+	00000000 00000000 00000000
+}
+
+PADDING: 80243758 to 80243760 (00003758 to 00003760)
+00000000 00000000
+
+#new:Script $Script_MakeEntities
+{
+    0:  Call  MakeEntity    ( .Entity:SavePoint ~Vec4d:Entity80243760 80000000 )
+   24:  Return
+   2C:  End
+}
+
+PADDING: 80243794 to 802437A0 (00003794 to 000037A0)
+00000000 00000000 00000000
+
+#new:ASCII $ASCII_802437A0
+{
+	"arn_20_shape"
+}
+
+#new:ASCII $ASCII_802437B0
+{
+	"arn_20_hit"
+}
+
+#new:ASCII $ASCII_802437BC
+{
+	"arn_tex"
+}
+
+#new:ASCII $ASCII_802437C4
+{
+	"arn_04"
+}
+
+#new:ASCII $ASCII_802437CC
+{
+	"dgb_01"
+}
+
+PADDING: 802437D4 to 802437E0 (000037D4 to 000037E0)
+00000000 00000000 00000000
+

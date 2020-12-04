@@ -1,0 +1,620 @@
+% Script File: kpa_53.mscr
+% Decoded from: 0 to 1E60 (kpa_53)
+
+#new:Function_Init $Function_Init
+{
+    0:  ADDIU     SP, SP, FFE8
+    4:  LIA       A0, 800D9230
+    C:  LIA       A1, $ASCII_80241E20
+   14:  LAW       V1, 8007419C
+   1C:  ADDIU     V0, R0, 2
+   20:  SW        RA, 10 (SP)
+   24:  JAL       ~Func:sprintf
+   28:  SB        V0, 84 (V1)
+   2C:  LIA       A0, 800D91E0
+   34:  LIA       A1, $ASCII_80241E30
+   38:  JAL       ~Func:sprintf
+   3C:  RESERVED
+   40:  LW        RA, 10 (SP)
+   44:  CLEAR     V0
+   48:  JR        RA
+   4C:  ADDIU     SP, SP, 18
+}
+
+#new:Function $Function_80240050
+{
+    0:  ADDIU     SP, SP, FFE0
+    4:  SW        S1, 14 (SP)
+    8:  COPY      S1, A0
+    C:  SW        RA, 1C (SP)
+   10:  SW        S2, 18 (SP)
+   14:  SW        S0, 10 (SP)
+   18:  LW        S0, C (S1)
+   1C:  LW        A1, 0 (S0)
+   20:  JAL       ~Func:get_variable
+   24:  ADDIU     S0, S0, 4
+   28:  COPY      A0, S1
+   2C:  LW        S2, 0 (S0)
+   30:  JAL       802CDAC0
+   34:  COPY      A1, V0
+   38:  LIA       S0, 8010EFC8
+   40:  COPY      V1, V0
+   44:  BEQ       V1, R0, .o104
+   48:  ADDIU     V0, R0, 2
+   4C:  LWC1      F0, 28 (S0)
+   50:  LAD       F2, $ConstDouble_80241E50
+   58:  TRUNC.W.S F4, F0
+   5C:  MFC1      V0, F4
+   60:  NOP
+   64:  ADDIU     V0, V0, FD44
+   68:  MTC1      V0, F0
+   6C:  NOP
+   70:  CVT.D.W   F0, F0
+   74:  MUL.D     F0, F0, F2
+   78:  NOP
+   7C:  TRUNC.W.D F4, F0
+   80:  MFC1      V0, F4
+   84:  NOP
+   88:  ADDIU     V0, V0, 2FD
+   8C:  MTC1      V0, F0
+   90:  NOP
+   94:  CVT.S.W   F0, F0
+   98:  SWC1      F0, 38 (V1)
+   9C:  LWC1      F2, 54 (S0)
+   A0:  MTC1      R0, F0
+   A4:  NOP
+   A8:  C.EQ.S    F2, F0
+   AC:  NOP
+   B0:  BC1F      .oC0
+   B4:  LUI       V0, A
+   B8:  BEQ       R0, R0, .oE4
+   BC:  ORI       V0, V0, 1
+        .oC0
+   C0:  LIF       F0, 2.0
+   C8:  NOP
+   CC:  C.LT.S    F2, F0
+   D0:  NOP
+   D4:  BC1F      .oE4
+   D8:  ORI       V0, V0, 3
+   DC:  LIO       V0, 000A0002
+        .oE4
+   E4:  COPY      A0, S1
+   E8:  SW        V0, 28 (V1)
+   EC:  LWC1      F0, 80 (S0)
+   F0:  TRUNC.W.S F4, F0
+   F4:  MFC1      A2, F4
+   F8:  JAL       ~Func:set_variable
+   FC:  COPY      A1, S2
+  100:  ADDIU     V0, R0, 2
+        .o104
+  104:  LW        RA, 1C (SP)
+  108:  LW        S2, 18 (SP)
+  10C:  LW        S1, 14 (SP)
+  110:  LW        S0, 10 (SP)
+  114:  JR        RA
+  118:  ADDIU     SP, SP, 20
+}
+
+PADDING: 8024016C to 80240170 (0000016C to 00000170)
+00000000
+
+#new:EntryList $EntryList
+{
+	~Vec4f:Entry0 % -480.0    0.0  -28.0   90.0
+	~Vec4f:Entry1 %  768.0    0.0  -28.0  270.0
+}
+
+#new:Header $Header
+{
+	[MainScript]  $Script_Main
+	[EntryList]   $EntryList
+	[EntryCount]  00000002
+	[Background]  00000000
+	[MapTattle]   0019017E
+}
+
+#new:Script $Script_802401D0
+{
+    0:  Call  SetMusicTrack ( 00000000 .Song:BowsersCastle 00000000 00000008 )
+   1C:  Call  UseDoorSounds ( .DoorSounds:Metal )
+   2C:  Thread
+   34:  	Wait  30`
+   40:  	Call  802D5FA4  ( 00000007 )
+   50:  EndThread
+   58:  Return
+   60:  End
+}
+
+PADDING: 80240238 to 80240240 (00000238 to 00000240)
+00000000 00000000
+
+#new:Script $Script_ExitDoubleDoor_80240240
+{
+    0:  SetGroup  0000001B
+    C:  Call  DisablePlayerInput    ( .True )
+   1C:  Set   *Var[0]  ~Entry:Entry0
+   2C:  Set   *Var[1]  00000009
+   3C:  Set   *Var[2]  00000081
+   4C:  Set   *Var[3]  00000083
+   5C:  Exec  ExitDoubleDoor
+   68:  Wait  17`
+   74:  Call  GotoMap   ( $ASCII_80241E3C 00000001 ) % kpa_102
+   88:  Wait  100`
+   94:  Return
+   9C:  End
+}
+
+#new:Script $Script_ExitDoubleDoor_802402E4
+{
+    0:  SetGroup  0000001B
+    C:  Call  DisablePlayerInput    ( .True )
+   1C:  Set   *Var[0]  ~Entry:Entry1
+   2C:  Set   *Var[1]  0000000E
+   3C:  Set   *Var[2]  00000087
+   4C:  Set   *Var[3]  00000085
+   5C:  Exec  ExitDoubleDoor
+   68:  Wait  17`
+   74:  Call  GotoMap   ( $ASCII_80241E44 00000000 ) % kpa_83
+   88:  Wait  100`
+   94:  Return
+   9C:  End
+}
+
+#new:Script $Script_80240388
+{
+    0:  Bind  $Script_ExitDoubleDoor_80240240 .Trigger:WallPressA 00000009 00000001 00000000
+   1C:  If  *Flag_KPA_12  ==  .True
+   2C:  	Bind  $Script_ExitDoubleDoor_802402E4 .Trigger:WallPressA 0000000E 00000001 00000000
+   48:  EndIf
+   50:  Return
+   58:  End
+}
+
+#new:Script $Script_EnterDoubleDoor_802403E8
+{
+    0:  Call  GetEntryID    ( *Var[0] )
+   10:  Switch  *Var[0]
+   1C:  	Case  ==  ~Entry:Entry0
+   28:  		Set   *Var[0]  00000000
+   38:  		Set   *Var[2]  00000081
+   48:  		Set   *Var[3]  00000083
+   58:  		Exec  EnterDoubleDoor
+   64:  		Exec  $Script_80240388
+   70:  	Case  ==  ~Entry:Entry1
+   7C:  		Set   *Var[0]  00000001
+   8C:  		Set   *Var[2]  00000087
+   9C:  		Set   *Var[3]  00000085
+   AC:  		Exec  EnterDoubleDoor
+   B8:  		Exec  $Script_80240388
+   C4:  EndSwitch
+   CC:  Return
+   D4:  End
+}
+
+#new:Script_Main $Script_Main
+{
+    0:  Set   *WorldMapLocation  .Location:BowsersCastle
+   10:  Call  SetSpriteShading  ( FFFFFFFF )
+   20:  Call  SetCamPerspective ( .Cam:Default 00000003 00000019 00000010 00001000 )
+   40:  Call  SetCamBGColor     ( .Cam:Default 00000000 00000000 00000000 )
+   5C:  Call  SetCamEnabled     ( .Cam:Default .True )
+   70:  Call  SetCamLeadPlayer  ( .Cam:Default .False )
+   84:  Call  MakeNpcs  ( 00000001 $NpcGroupList_80241DBC )
+   98:  ExecWait  $Script_MakeEntities
+   A4:  Call  ModifyColliderFlags   ( 00000001 00000009 7FFFFE00 )
+   BC:  Call  ModifyColliderFlags   ( 00000001 0000000E 7FFFFE00 )
+   D4:  Exec  $Script_EnterDoubleDoor_802403E8
+   E0:  Wait  1`
+   EC:  Exec  $Script_802401D0
+   F8:  Return
+  100:  End
+}
+
+PADDING: 802405CC to 802405D0 (000005CC to 000005D0)
+00000000
+
+#new:NpcSettings $NpcSettings_802405D0
+{
+	00000000 002E0024 00000000 00000000 00000000 00000000 00000000 00000000
+	00000000 00000000 00630000
+}
+
+#new:NpcSettings $NpcSettings_802405FC
+{
+	00000000 001E002D 00000000 00000000 00000000 00000000 00000000 00000000
+	00000000 00000000 00630000
+}
+
+#new:Script $Script_NpcAI_80240628
+{
+    0:  Call  GetNpcPos ( .Npc:Self *Var[0] *Var[1] *Var[2] )
+   1C:  Add   *Var[0]  FFFFFF7E
+   2C:  Loop
+   38:  	Wait  1`
+   44:  	Call  GetPlayerPos  ( *Var[1] *Var[2] *Var[3] )
+   5C:  	If  *Var[1]  >=  *Var[0]
+   6C:  		BreakLoop
+   74:  	EndIf
+   7C:  EndLoop
+   84:  Call  DisablePlayerInput    ( .True )
+   94:  Call  PlaySoundAtNpc    ( .Npc:Self 00000262 00000000 )
+   AC:  Call  ShowEmote ( .Npc:Self .Emote:Exclamation 0000002D 00000014 00000001 00000000 00000000 00000000 00000000 )
+   DC:  Wait  20`
+   E8:  Call  InterpNpcYaw      ( .Npc:Self 0000005A 00000005 )
+  100:  Call  SetNpcAnimation   ( .Npc:Self 004E0004 )
+  114:  Call  GetNpcPos ( .Npc:Self *Var[0] *Var[1] *Var[2] )
+  130:  Add   *Var[0]  00000096
+  140:  Call  NpcMoveTo ( .Npc:Self *Var[0] FFFFFFE2 00000014 )
+  15C:  Call  SetNpcAnimation   ( .Npc:Self 004E0002 )
+  170:  Call  SetNpcPos ( .Npc:Self 00000000 FFFFFC18 00000000 )
+  18C:  Call  DisablePlayerInput    ( .False )
+  19C:  Return
+  1A4:  End
+}
+
+#new:Script $Script_NpcAI_802407D4
+{
+    0:  Call  DisablePlayerInput    ( .True )
+   10:  Call  GetNpcPos ( 00000000 *Var[2] *Var[3] *Var[4] )
+   2C:  Thread
+   34:  	Add   *Var[4]  0000000F
+   44:  	Loop  00000008
+   50:  		Call  PlayEffect    ( ~FX:BigSmokePuff *Var[2] *Var[3] *Var[4] 00000001 00000001 00000001 00000001 00000000 00000000 00000000 00000000 00000000 00000000 )
+   94:  		Wait  5`
+   A0:  	EndLoop
+   A8:  EndThread
+   B0:  Call  PlaySoundAtNpc    ( 00000000 000020B8 00000000 )
+   C8:  Call  MakeLerp  ( 00000000 000005A0 00000014 .Easing:QuadraticIn )
+   E4:  Loop
+   F0:  	Call  UpdateLerp ( )
+   FC:  	Call  SetNpcRotation    ( 00000000 00000000 *Var[0] 00000000 )
+  118:  	Wait  1`
+  124:  	If  *Var[1]  ==  00000000
+  134:  		BreakLoop
+  13C:  	EndIf
+  144:  EndLoop
+  14C:  Call  PlaySoundAtNpc    ( 00000000 .Sound:SmokeBurst 00000000 )
+  164:  Call  SetNpcPos ( 00000001 00000000 FFFFFC18 00000000 )
+  180:  Call  SetNpcPos ( 00000000 00000000 FFFFFC18 00000000 )
+  19C:  Call  EnableNpcShadow   ( 00000000 .False )
+  1B0:  Call  SetNpcPos ( .Npc:Self *Var[2] *Var[3] *Var[4] )
+  1CC:  Call  SetNpcYaw ( .Npc:Self 0000010E )
+  1E0:  Call  MakeLerp  ( FFFFFA60 00000000 00000014 .Easing:QuadraticOut )
+  1FC:  Loop
+  208:  	Call  UpdateLerp ( )
+  214:  	Call  SetNpcRotation    ( .Npc:Self 00000000 *Var[0] 00000000 )
+  230:  	Wait  1`
+  23C:  	If  *Var[1]  ==  00000000
+  24C:  		BreakLoop
+  254:  	EndIf
+  25C:  EndLoop
+  264:  Wait  10`
+  270:  Call  SpeakToPlayer     ( .Npc:Self 004E0005 004E0002 00000000 0013002D ) % Aw, shoot! I wonder how you saw through my disguis ...
+  290:  Call  StartBossBattle   ( .Song:SpecialBattle )
+  2A0:  Call  GetPlayerPos      ( *Var[0] *Var[1] *Var[2] )
+  2B8:  If  *Var[0]  <  000002BC
+  2C8:  	Add   *Var[0]  0000001E
+  2D8:  	Call  SetNpcAnimation   ( .Npc:Self 004E0004 )
+  2EC:  	Call  NpcMoveTo ( .Npc:Self *Var[0] *Var[2] 00000023 )
+  308:  EndIf
+  310:  Return
+  318:  End
+}
+
+#new:Script $Script_Defeat_80240AF4
+{
+    0:  Call  RemoveNpc ( 00000000 )
+   10:  Call  RemoveNpc ( 00000001 )
+   20:  Set   *Flag_KPA_12  .True
+   30:  Bind  $Script_ExitDoubleDoor_802402E4 .Trigger:WallPressA 0000000E 00000001 00000000
+   4C:  Call  DisablePlayerInput    ( .False )
+   5C:  Call  DoNpcDefeat ( )
+   68:  Return
+   70:  End
+}
+
+#new:Script $Script_Init_80240B6C
+{
+    0:  If  *Flag_KPA_12  ==  .False
+   10:  	If  *Flag_KPA_11  ==  .True
+   20:  		Call  SetNpcPos     ( .Npc:Self FFFFFF88 00000000 FFFFFFE2 )
+   3C:  		Call  SetNpcYaw     ( .Npc:Self 0000010E )
+   50:  		Call  BindNpcIdle   ( .Npc:Self $Script_NpcAI_80240628 )
+   64:  	EndIf
+   6C:  	Call  BindNpcDefeat ( .Npc:Self $Script_Defeat_80240AF4 )
+   80:  Else
+   88:  	Call  RemoveNpc ( .Npc:Self )
+   98:  EndIf
+   A0:  Return
+   A8:  End
+}
+
+#new:Script $Script_Interact_80240C1C
+{
+    0:  Call  SetNpcAnimation   ( 00000000 000C0000 )
+   14:  Wait  10`
+   20:  Call  SetNpcAnimation   ( 00000000 000C0026 )
+   34:  Call  GetSelfVar        ( 00000000 *Var[0] )
+   48:  Switch  *Var[0]
+   54:  	Case  ==  00000000
+   60:  		Call  SpeakToPlayer ( .Npc:Self 000C0001 000C0026 00000000 00130023 ) % Oh, Mario! You came to rescue me! Thank you so muc ...
+   80:  		Call  SetPlayerAnimation    ( 00010002 )
+   90:  		Wait  1`
+   9C:  		Call  SetPlayerAnimation    ( 00080007 )
+   AC:  		Wait  35`
+   B8:  		Call  SpeakToPlayer ( .Npc:Self 000C0001 000C0026 00000000 00130024 ) % Oh, me? Oh, I just saw a chance to get away from B ...
+   D8:  		Set   *Flag_KPA_11  .True
+   E8:  		Call  SetSelfVar    ( 00000000 00000001 )
+   FC:  		Call  SetSelfVar    ( 00000001 00000001 )
+  110:  	Case  ==  00000001
+  11C:  		Call  SpeakToPlayer ( .Npc:Self 000C0001 000C0026 00000000 00130025 ) % Let's go home now, OK? We'd better go back the way ...
+  13C:  		Call  SetSelfVar    ( 00000000 00000002 )
+  150:  	Case  ==  00000002
+  15C:  		Call  SpeakToPlayer ( .Npc:Self 000C0001 000C0026 00000000 00130026 ) % Let's go home now, OK? We'd better go back the way ...
+  17C:  		Call  SetSelfVar    ( 00000000 00000001 )
+  190:  EndSwitch
+  198:  Call  SetNpcAnimation   ( 00000000 000C0002 )
+  1AC:  Wait  10`
+  1B8:  Call  SetNpcAnimation   ( 00000000 000A0001 )
+  1CC:  Return
+  1D4:  End
+}
+
+#new:Script $Script_Interact_80240DF8
+{
+    0:  Call  SetNpcAnimation   ( 00000000 000C0000 )
+   14:  Wait  10`
+   20:  Call  SetNpcAnimation   ( 00000000 000C0026 )
+   34:  Call  GetSelfVar        ( 00000000 *Var[0] )
+   48:  If  *Var[0]  ==  00000000
+   58:  	Call  SpeakToPlayer ( .Npc:Self 000C0001 000C0026 00000000 00130027 ) % Oh... What? What's wrong, Mario? ...A suspicious g ...
+   78:  	Call  SetSelfVar    ( 00000000 00000001 )
+   8C:  	Call  SetSelfVar    ( 00000001 00000001 )
+   A0:  Else
+   A8:  	Call  SpeakToPlayer ( .Npc:Self 000C0001 000C0026 00000000 00130028 ) % Now there's no time to spare! Let's get out of her ...
+   C8:  EndIf
+   D0:  Call  SetNpcAnimation   ( 00000000 000C0002 )
+   E4:  Wait  10`
+   F0:  Call  SetNpcAnimation   ( 00000000 000A0001 )
+  104:  Return
+  10C:  End
+}
+
+#new:Script $Script_Hit_80240F0C
+{
+    0:  Call  GetOwnerEncounterTrigger  ( *Var[0] )
+   10:  Switch  *Var[0]
+   1C:  	CaseOR  ==  .EncounterTrigger:Hammer % 4
+   28:  	CaseOR  ==  .EncounterTrigger:Jump % 2
+   34:  	CaseOR  ==  .EncounterTrigger:Partner % 6
+   40:  		Call  DisablePlayerInput    ( .True )
+   50:  		Call  SetNpcVar ( 00000000 00000002 00000001 )
+   68:  		Call  InterpNpcYaw      ( 00000000 0000010E 00000000 )
+   80:  		Call  SetNpcAnimation   ( 00000000 000C0000 )
+   94:  		Wait  10`
+   A0:  		Call  SetNpcAnimation   ( 00000000 000C0026 )
+   B4:  		Call  SpeakToPlayer     ( 00000000 000C0001 000C0026 00000000 00130029 ) % Oh, ow! Please don't! How could you?
+   D4:  		Call  SetNpcAnimation   ( 00000000 000C0002 )
+   E8:  		Wait  10`
+   F4:  		Call  SetNpcAnimation   ( 00000000 000A0001 )
+  108:  		Call  SetNpcVar ( 00000000 00000002 00000000 )
+  120:  		Call  DisablePlayerInput    ( .False )
+  130:  	EndCaseGroup
+  138:  EndSwitch
+  140:  Return
+  148:  End
+}
+
+#new:Script $Script_Hit_8024105C
+{
+    0:  Call  GetOwnerEncounterTrigger  ( *Var[0] )
+   10:  Switch  *Var[0]
+   1C:  	CaseOR  ==  .EncounterTrigger:Hammer % 4
+   28:  	CaseOR  ==  .EncounterTrigger:Jump % 2
+   34:  	CaseOR  ==  .EncounterTrigger:Partner % 6
+   40:  		Call  DisablePlayerInput    ( .True )
+   50:  		Call  SetNpcVar ( 00000000 00000002 00000001 )
+   68:  		Call  InterpNpcYaw      ( 00000000 0000010E 00000000 )
+   80:  		Call  SetNpcAnimation   ( 00000000 000C0000 )
+   94:  		Wait  10`
+   A0:  		Call  SetNpcAnimation   ( 00000000 000C0026 )
+   B4:  		Call  GetSelfVar        ( 00000000 *Var[1] )
+   C8:  		Switch  *Var[1]
+   D4:  			Case  ==  00000000
+   E0:  				Call  SpeakToPlayer ( 00000000 000C0001 000C0026 00000000 0013002A ) % Ouch! Oh, how could you? You're so cruel, Mario! W ...
+  100:  				Call  SetSelfVar    ( 00000000 00000001 )
+  114:  			Case  ==  00000001
+  120:  				Call  SpeakToPlayer ( 00000000 000C0001 000C0026 00000000 0013002B ) % No!! Ow! Stop it! Please don't!!! Help me, King Bo ...
+  140:  				Call  SetSelfVar    ( 00000000 00000002 )
+  154:  			Case  ==  00000002
+  160:  				Call  GetPlayerPos  ( *Var[0] *Var[1] *Var[2] )
+  178:  				If  *Var[0]  <  0000010E % 10E
+  188:  					Call  SpeakToPlayer ( 00000000 000C0001 000C0026 00000000 0013002B ) % No!! Ow! Stop it! Please don't!!! Help me, King Bo ...
+  1A8:  				Else
+  1B0:  					Call  SpeakToPlayer ( 00000000 000C0001 000C0026 00000000 0013002C ) % I said, cut it out!!
+  1D0:  					Call  SetSelfEnemyFlagBits  ( 08000000 00000001 )
+  1E4:  					Call  BindNpcAI ( 00000002 $Script_NpcAI_802407D4 )
+  1F8:  				EndIf
+  200:  		EndSwitch
+  208:  		Call  SetNpcAnimation   ( 00000000 000C0002 )
+  21C:  		Wait  10`
+  228:  		Call  SetNpcAnimation   ( 00000000 000A0001 )
+  23C:  		Call  SetNpcVar ( 00000000 00000002 00000000 )
+  254:  		Call  DisablePlayerInput    ( .False )
+  264:  	EndCaseGroup
+  26C:  EndSwitch
+  274:  Return
+  27C:  End
+}
+
+#new:Script $Script_Idle_802412E0
+{
+    0:  Loop
+    C:  	Wait  1`
+   18:  	Call  NpcFacePlayer ( .Npc:Self 00000000 )
+   2C:  	Call  GetSelfVar    ( 00000001 *Var[0] )
+   40:  	If  *Var[0]  ==  00000001
+   50:  		BreakLoop
+   58:  	EndIf
+   60:  EndLoop
+   68:  Set   *Var[F]  00000000
+   78:  Loop
+   84:  	Wait  1`
+   90:  	Switch  *Var[F]
+   9C:  		Case  ==  00000000
+   A8:  			Call  NpcFacePlayer ( .Npc:Self 00000000 )
+   BC:  			Call  GetPlayerPos  ( *Var[0] *Var[1] *Var[2] )
+   D4:  			If  *Var[0]  <=  000002BC
+   E4:  				Set   *Var[F]  00000001
+   F4:  			EndIf
+   FC:  		Case  ==  00000001
+  108:  			Call  GetSelfVar    ( 00000002 *Var[0] )
+  11C:  			If  *Var[0]  ==  00000001
+  12C:  				BreakCase
+  134:  			EndIf
+  13C:  			Call  $Function_80240050    ( 00000000 *Var[0] )
+  150:  			Call  InterpNpcYaw  ( .Npc:Self *Var[0] 00000000 )
+  168:  			Call  GetNpcPos     ( .Npc:Self *Var[1] *Var[2] *Var[3] )
+  184:  			Call  InterpNpcYaw  ( 00000001 *Var[0] 00000000 )
+  19C:  			Call  SetNpcPos     ( 00000001 *Var[1] *Var[2] *Var[3] )
+  1B8:  			If  *Var[1]  <=  00000064
+  1C8:  				Call  SetNpcAnimation   ( .Npc:Self 000A0001 )
+  1DC:  				Call  SetNpcPos ( .Npc:Self 000002FD 00000000 FFFFFFE2 )
+  1F8:  				Call  SetNpcPos ( 00000001 000002FD 00000000 FFFFFFE2 )
+  214:  				Call  SetNpcPos ( 00000002 00000096 00000000 FFFFFFE2 )
+  230:  				Call  SetNpcYaw ( 00000002 0000010E )
+  244:  				Call  BindNpcAI ( 00000002 $Script_NpcAI_80240628 )
+  258:  				Call  SetSelfVar        ( 00000000 00000000 )
+  26C:  				Call  BindNpcInteract   ( 00000000 $Script_Interact_80240DF8 )
+  280:  				Call  SetNpcVar ( 00000001 00000000 00000000 )
+  298:  				Call  BindNpcHit        ( 00000001 $Script_Hit_8024105C )
+  2AC:  				Set   *Var[F]  00000002
+  2BC:  			EndIf
+  2C4:  			If  *Var[1]  >=  000002FD
+  2D4:  				Call  SetNpcAnimation   ( .Npc:Self 000A0001 )
+  2E8:  				Call  InterpNpcYaw      ( .Npc:Self 0000010E 00000000 )
+  300:  				Set   *Var[F]  00000000
+  310:  			EndIf
+  318:  		Case  ==  00000002
+  324:  			Call  GetPlayerPos  ( *Var[0] *Var[1] *Var[2] )
+  33C:  			If  *Var[0]  >  000002BC
+  34C:  				Set   *Var[F]  00000000
+  35C:  			EndIf
+  364:  	EndSwitch
+  36C:  EndLoop
+  374:  Return
+  37C:  End
+}
+
+#new:Script $Script_Init_80241664
+{
+    0:  If  *Flag_KPA_12  ==  .False
+   10:  	Call  SetNpcPos ( .Npc:Self 000002FD 00000000 FFFFFFE2 )
+   2C:  	If  *Flag_KPA_11  ==  .False
+   3C:  		Call  BindNpcInteract   ( .Npc:Self $Script_Interact_80240C1C )
+   50:  	Else
+   58:  		Call  BindNpcInteract   ( .Npc:Self $Script_Interact_80240DF8 )
+   6C:  	EndIf
+   74:  	Call  BindNpcIdle   ( .Npc:Self $Script_Idle_802412E0 )
+   88:  Else
+   90:  	Call  RemoveNpc ( .Npc:Self )
+   A0:  EndIf
+   A8:  Return
+   B0:  End
+}
+
+#new:Script $Script_Init_8024171C
+{
+    0:  If  *Flag_KPA_12  ==  .False
+   10:  	Call  SetNpcPos ( .Npc:Self 000002FD 00000000 FFFFFFE2 )
+   2C:  	Call  SetNpcFlagBits    ( .Npc:Self 00000002 .True )
+   44:  	Call  EnableNpcShadow   ( .Npc:Self .False )
+   58:  	If  *Flag_KPA_11  ==  .False
+   68:  		Call  BindNpcHit    ( .Npc:Self $Script_Hit_80240F0C )
+   7C:  	Else
+   84:  		Call  BindNpcHit    ( .Npc:Self $Script_Hit_8024105C )
+   98:  	EndIf
+   A0:  Else
+   A8:  	Call  RemoveNpc ( .Npc:Self )
+   B8:  EndIf
+   C0:  Return
+   C8:  End
+}
+
+#new:NpcGroup $NpcGroup_802417EC
+{
+	00000000 $NpcSettings_802405D0 ~Vec3f:NPC_802417EC % 0 -1000 0
+	00A60D0D $Script_Init_80241664 00000000 00000000 0000010E
+	~NoDrops
+	~Movement:NPC_802417EC
+	~AnimationTable:NPC_802417EC % .Sprite:BattleKooper
+	00000000 00000000 00000000 001A0120 % It looks like Princess Peach, but something just d ...
+	%
+	% $NpcGroup_802417EC[1F0]
+	00000001 $NpcSettings_802405D0 ~Vec3f:NPC_802419DC % 0 -1000 0
+	01B40F0C $Script_Init_8024171C 00000000 00000000 0000010E
+	~NoDrops
+	~Movement:NPC_802419DC
+	~AnimationTable:NPC_802419DC % .Sprite:BattleKooper
+	00000000 00000000 00000000 001A0120 % It looks like Princess Peach, but something just d ...
+	%
+	% $NpcGroup_802417EC[3E0]
+	00000002 $NpcSettings_802405FC ~Vec3f:NPC_80241BCC % 0 -1000 0
+	00E40D09 $Script_Init_80240B6C 00000000 00000000 0000010E
+	~Items:5:SuperShroom:5:MapleSyrup:5:ThunderRage:5:StopWatch:5
+	~HP:Standard:2 ~FP:Standard:5 ~CoinBonus:1:3
+	~Movement:NPC_80241BCC
+	~AnimationTable:NPC_80241BCC % .Sprite:Duplighost
+	00000000 00000000 00000000 00000000 % no tattle string
+}
+
+#new:NpcGroupList $NpcGroupList_80241DBC
+{
+	00000003 $NpcGroup_802417EC 24020001
+	00000000 00000000 00000000
+}
+
+PADDING: 80241DD4 to 80241DE0 (00001DD4 to 00001DE0)
+00000000 00000000 00000000
+
+#new:Script $Script_MakeEntities
+{
+    0:  Call  MakeEntity    ( .Entity:HealingBlock ~Vec4d:Entity80241DE0 80000000 )
+   24:  Return
+   2C:  End
+}
+
+PADDING: 80241E14 to 80241E20 (00001E14 to 00001E20)
+00000000 00000000 00000000
+
+#new:ASCII $ASCII_80241E20
+{
+	"kpa_50_shape"
+}
+
+#new:ASCII $ASCII_80241E30
+{
+	"kpa_50_hit"
+}
+
+#new:ASCII $ASCII_80241E3C
+{
+	"kpa_102"
+}
+
+#new:ASCII $ASCII_80241E44
+{
+	"kpa_83"
+}
+
+PADDING: 80241E4C to 80241E50 (00001E4C to 00001E50)
+00000000
+
+#new:ConstDouble $ConstDouble_80241E50
+{
+	0.850000d
+}
+
+PADDING: 80241E58 to 80241E60 (00001E58 to 00001E60)
+00000000 00000000
+

@@ -1,0 +1,272 @@
+%Z + C-right increase Start/End Mode
+%Dpad Up/Down navigate the menu
+%L + R + A + B to toggle timers
+%L + C-up to open menu
+
+#new:Data $CursorPosition
+{
+	00000000
+}
+
+#new:Function $HandleCursorPosition
+{
+	PUSH ra
+	LAW t0, $CursorPosition
+	BEQ t0, r0, .isStart
+	NOP
+	ORI t1, r0, 0001
+	BEQ t0, t1, .isEnd
+	NOP
+	ORI t1, r0, 0002
+	BEQ t0, t1, .isReset
+	NOP
+	BEQ r0, r0, .end
+	NOP
+	.isStart
+	LAH t0, 80074026
+	ORI t1, r0, 2001 %Z button + C-right
+	BNE t0, t1, .end
+	NOP
+	LAH t0, 80074036
+	ORI t1, r0, 0001 %C-right
+	BEQ t0, t1, .increaseStart
+	NOP
+	BEQ r0, r0, .end
+	NOP
+	.increaseStart
+	LAW t0, $TimerStateStart
+	ADDIU t0, t0, 0001
+	SLTI t1, t0, 0003
+	BEQL r0, t1, .setState1
+	ORI t0, r0, 0000
+	.setState1
+	SAW t0, $TimerStateStart
+	BEQ r0, r0, .end
+	NOP
+	.isEnd
+	LAH t0, 80074026
+	ORI t1, r0, 2001 %R button + C-right
+	BNE t0, t1, .end
+	NOP
+	LAH t0, 80074036
+	ORI t1, r0, 0001 %C-right
+	BEQ t0, t1, .increaseEnd
+	NOP
+	BEQ r0, r0, .end
+	NOP
+	.increaseEnd
+	LAW t0, $TimerStateEnd
+	ADDIU t0, t0, 0001
+	SLTI t1, t0, 0003
+	BEQL r0, t1, .setState2
+	ORI t0, r0, 0000
+	.setState2
+	SAW t0, $TimerStateEnd
+	BEQ r0, r0, .end
+	NOP
+	.end
+	JPOP ra
+	NOP
+	.isReset
+	LAH t0, 80074036
+	ORI t1, r0, 0010 %R button
+	BNE t0, t1, .end
+	NOP
+	JAL $ResetTimers
+	NOP
+	ORI t0, r0, 0001
+	SAW t0, $TimerMainState
+	SAW r0, $MainTimerBool
+	SAW r0, $FrameTimerBool
+	LIO t0, $64BitCount
+	SD r0, 0000 (t0)
+	LIO a0, $TimerFinalString
+	LIO a1, $TimerFinalStringBackup
+	JAL ~Func:strcpy 
+	NOP
+	BEQ r0, r0, .end
+	NOP
+}
+
+#new:Data $TimerFinalStringBackup
+{
+	FF0D0C0C 10101A10
+	101A1010 10FD0000
+	00000000 00000000
+	00000000 00000000
+	00000000 00000000
+	00000000 00000000
+}
+
+#new:Function $ClearTextColors
+{
+	LIO t0, $TextPointers
+	.loop
+	LW t1, 0000 (t0)
+	BEQ t1, r0, .exit
+	NOP
+	SB r0, 0006 (t1)
+	BEQ r0, r0, .loop
+	ADDIU t0, t0, 0004
+	.exit
+	JR RA
+	NOP
+}
+
+#new:Function $ColorSelectedOption
+{
+	LAW t0, $CursorPosition
+	SLL t0, t0, 0002 %multiply by 4
+	LIO t1, $TextPointers
+	ADDU t1, t0, t1
+	LW t0, 0000 (t1) %load current text pointer
+	ORI t1, r0, 0001
+	SB t1, 0006 (t0)
+	JR RA
+	NOP
+}
+
+#new:Function $MoveCursor
+{
+	LAH t0, 80074036
+	ORI t1, r0, 0800 %dpad up
+	BEQ t0, t1, .decrease
+	NOP
+	ORI t1, r0, 0400 %dpad down
+	BEQ t0, t1, .increase
+	NOP
+	.end
+	JR RA
+	NOP
+	.increase
+	LAW t0, $CursorPosition
+	ADDIU t0, t0, 0001
+	SLTI t1, t0, 0003
+	BEQL r0, t1, .setincreaseposition
+	ORI t0, r0, 0000
+	.setincreaseposition
+	SAW t0, $CursorPosition
+	BEQ r0, r0, .end
+	NOP
+	.decrease
+	LAW t0, $CursorPosition
+	ADDIU t0, t0, FFFF
+	BLTZL t0, .setdecreaseposition
+	ORI t0, r0, 0002
+	.setdecreaseposition
+	SAW t0, $CursorPosition
+	BEQ r0, r0, .end
+	NOP
+	JR RA
+	NOP
+}
+#new:Function $PrintMenu
+{
+ADDIU sp, sp, -20
+SW ra, 0018 (sp)
+LIO a0, $Text1
+ORI a1, r0, 00E6
+ORI a2, r0, 0080
+ORI a3, r0, 00FE
+SW r0, 0010 (sp)
+JAL 801264EC
+SW r0, 0014 (sp)
+%
+LIO a0, $Text2
+ORI a1, r0, 00E6
+ORI a2, r0, 0090
+ORI a3, r0, 00FE
+SW r0, 0010 (sp)
+JAL 801264EC
+SW r0, 0014 (sp)
+%
+LIO a0, $Text3
+ORI a1, r0, 00E6
+ORI a2, r0, 00A0
+ORI a3, r0, 00FE
+SW r0, 0010 (sp)
+JAL 801264EC
+SW r0, 0014 (sp)
+%
+/%
+LIO a0, $Text4
+ORI a1, r0, 00E6
+ORI a2, r0, 00B0
+ORI a3, r0, 00FE
+SW r0, 0010 (sp)
+JAL 801264EC
+SW r0, 0014 (sp)
+%/
+LW ra, 0018 (sp)
+JR RA
+ADDIU sp, sp, 20
+}
+
+#new:Data $TextPointers
+{
+	$Text1
+	$Text2
+	$Text3
+	$Text4
+	00000000
+}
+
+#new:Data $Text1
+{
+	FF0D0C0C FF0500F7
+	33544152 541AF7FD
+	00000000 00000000
+}
+
+#new:Data $Text2
+{
+	FF0D0C0C FF0500F7
+	254E441A F7FD0000
+	00000000 00000000
+}
+
+#new:Data $Text3
+{
+	FF0D0C0C FF0500F7
+	32455345 54FD0000
+	00000000 00000000
+}
+
+#new:Data $Text4
+{
+	FF0D0C0C FF0500F7
+	30415553 45FD0000
+	00000000 00000000
+}
+
+#new:Data $SecondStringPointers
+{
+	$LZExitString
+	$RString
+	$LString
+}
+
+#new:Data $LZExitString
+{
+	FF0D0A0A FF05002C
+	3AF72558 4954FDFD
+}
+
+#new:Data $LString
+{
+	FF0D0A0A FF05002C
+	FD000000 00000000
+}
+
+#new:Data $RString
+{
+	FF0D0A0A FF050032
+	FD000000 00000000
+}
+
+#export $MoveCursor
+#export $PrintMenu
+#export $ClearTextColors
+#export $ColorSelectedOption
+#export $HandleCursorPosition
+#export $SecondStringPointers

@@ -1,0 +1,142 @@
+#new:Data $PreviousCount
+{
+	00000000
+}
+
+#new:Data $64BitCount
+{
+	00000000 00000000
+}
+
+#new:Data $HzofN64
+{
+	00000000 02CB4178 %46,875,000hz
+}
+
+#new:Data $InitFlag
+{
+	00000000
+}
+
+#new:Data $CurrentTimerStartMethod
+{
+	00000000
+}
+
+#new:Data $CurrentTimerEndMethod
+{
+	00000000
+}
+
+#new:Data $Formatters
+{
+	2532643A 2532643A
+	25336400 00000000
+}
+
+#new:Data $WhereToPlaceAscii
+{
+	00000000 00000000
+	00000000 00000000
+	00000000 00000000
+	00000000 00000000
+	00000000 00000000
+	00000000 00000000
+}
+
+#new:Data $TimerFinalString
+{
+	FF0D0C0C 10101A10
+	101A1010 10FD0000
+	00000000 00000000
+	00000000 00000000
+	00000000 00000000
+	00000000 00000000
+}
+
+#new:Data $FrameTimerAscii
+{
+	00000000 00000000
+	00000000 00000000
+	00000000 00000000
+}
+
+#new:Data $FrameTimerString
+{
+	FF0D0C0C 00000000
+	00000000 00000000
+	00000000 00000000
+}
+
+#new:Data $FrameTimerFormatters
+{
+	25640000
+}
+
+#new:Data $Minutes
+{
+	00000000 00000000
+}
+
+#new:Data $Seconds
+{
+	00000000 00000000
+}
+
+#new:Data $Milliseconds
+{
+	00000000 00000000
+}
+
+#new:Data $MillisecondsElapsedTime
+{
+	00000000 00000000
+}
+
+
+#new:Data $TimerPrintBool
+{
+	00000000
+}
+
+#new:Data $MainTimerBool
+{
+	00000000
+}
+
+#new:Data $FrameTimerBool
+{
+	00000000
+}
+
+#new:Data $FrameTimerBoolGraphic
+{
+	00000000
+}
+
+#new:Data $FrameCountElapsed
+{
+	00000000
+}
+
+#export $PreviousCount
+#export $64BitCount
+#export $HzofN64
+#export $InitFlag
+#export $CurrentTimerStartMethod
+#export $CurrentTimerEndMethod
+#export $Formatters
+#export $WhereToPlaceAscii
+#export $TimerFinalString
+#export $FrameTimerAscii
+#export $FrameTimerString
+#export $FrameTimerFormatters
+#export $Minutes
+#export $Seconds
+#export $Milliseconds
+#export $MillisecondsElapsedTime
+#export $TimerPrintBool
+#export $MainTimerBool
+#export $FrameTimerBool
+#export $FrameTimerBoolGraphic
+#export $FrameCountElapsed
