@@ -1,7 +1,7 @@
 # RZ
 Paper Mario Practice ROM<br/>
 
-Star Rod 0.3.2 - https://drive.google.com/file/d/1x9a5dA5tOgf-n53cJ0bYShJ_WycCCfw_/<br/>
+Star Rod 0.5.2 - https://drive.google.com/file/d/1jBuJD0BeuR1gyWi5E15wqzR7rCrJOPPv/<br/>
 Star Rod Patcher - https://cdn.discordapp.com/attachments/455989477664620544/456888315371847681/StarRod_Patcher.zip<br/>
 decomp repo: https://github.com/ethteck/papermario<br/>
 star-rod-c repo: https://github.com/nanaian/star-rod-c<br/>
